@@ -1,0 +1,21 @@
+{
+  "name": "My Setup",
+  "id": "my-setup",
+  "version": "1.0.0",
+  "description": "自分の共通開発環境",
+  "options": {
+    "installTools": {
+      "type": "boolean",
+      "default": true,
+      "description": "ripgrepなどを入れる"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens"
+      ]
+    }
+  }
+}
