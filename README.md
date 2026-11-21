@@ -7,6 +7,7 @@
 
 | Feature | 内容 |
 | --- | --- |
+| [`git-config`](src/git-config) | Git のユーザー設定と GitHub CLI の認証連携 |
 | [`my-setup`](src/my-setup) | 共通の VS Code 拡張・設定（Prettier、Git 系、Container Tools）と zsh |
 | [`python`](src/python) | Python 向けの VS Code 拡張・設定（Python、Ruff） |
 | [`opencode`](src/opencode) | OpenCode 本体と、設定・データの永続化マウント |
@@ -19,14 +20,28 @@
 {
   "image": "mcr.microsoft.com/devcontainers/python:3.14-trixie",
   "features": {
+    "ghcr.io/shira-code-cmd/devcontainer-features/git-config:1": {
+      "gitUserName": "your-name",
+      "gitUserEmail": "you@example.com"
+    },
     "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:2": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/python:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/opencode:1": {},
     "ghcr.io/devcontainers/features/node:2.1.2": {}
   },
+  "initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh",
   "postCreateCommand": "pip install -r requirements.txt"
 }
 ```
+
+### `git-config`
+
+- `gitUserName` / `gitUserEmail` を指定すると、`git config --global` に名前とメールを設定します（空の場合は設定しません）
+- ホストの `~/.config/gh` を `/mnt/gh/config` に bind mount し、コンテナ内の `~/.config/gh` から symlink します
+- `gh` は `ghcr.io/devcontainers/features/github-cli` を依存としてインストールします
+- `github.com` / `gist.github.com` の credential helper に `!gh auth git-credential` を設定します（`gh auth setup-git` 相当）
+- ホスト側で `gh auth login` 済みである必要があります。`~/.config/gh` がない場合は未認証のまま起動します
+- `initializeCommand` で `~/.config/gh` を作成しておくと、Docker が root 所有の空ディレクトリを作るのを防げます
 
 ### `my-setup`
 

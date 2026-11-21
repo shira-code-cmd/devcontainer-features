@@ -36,13 +36,14 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # opencode Feature は ${localEnv:HOME}/... を bind mount するため、
+      # opencode / git-config Feature は ${localEnv:HOME}/... を bind mount するため、
       # マウント元ディレクトリを CI ランナーにも用意する
-      - name: "Create host directories for opencode mount tests"
+      - name: "Create host directories for mount tests"
         run: |
           mkdir -p "$HOME/.config/opencode"
           mkdir -p "$HOME/.local/share/opencode"
           mkdir -p "$HOME/.local/state/opencode"
+          mkdir -p "$HOME/.config/gh"
 
       - name: "Install latest devcontainer CLI"
         run: npm install -g @devcontainers/cli
@@ -60,13 +61,14 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # opencode Feature は ${localEnv:HOME}/... を bind mount するため、
+      # opencode / git-config Feature は ${localEnv:HOME}/... を bind mount するため、
       # マウント元ディレクトリを CI ランナーにも用意する
-      - name: "Create host directories for opencode mount tests"
+      - name: "Create host directories for mount tests"
         run: |
           mkdir -p "$HOME/.config/opencode"
           mkdir -p "$HOME/.local/share/opencode"
           mkdir -p "$HOME/.local/state/opencode"
+          mkdir -p "$HOME/.config/gh"
 
       - name: "Install latest devcontainer CLI"
         run: npm install -g @devcontainers/cli
