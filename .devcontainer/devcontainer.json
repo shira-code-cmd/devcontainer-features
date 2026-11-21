@@ -12,7 +12,8 @@
   ],
   "remoteUser": "node",
   "initializeCommand": "mkdir -p .devcontainer && echo GH_TOKEN=$(gh auth token --user shira-code-cmd) > .devcontainer/devcontainer.env ",
-  "postCreateCommand": "git config --global user.name 'shira-code-cmd' && git config --global user.email 'marty.go.go.pooh@gmail.com' && gh auth setup-git && npm install -g @devcontainers/cli",
+  "postCreateCommand": "git config --global user.name 'shira-code-cmd' && git config --global user.email 'marty.go.go.pooh@gmail.com' && npm install -g @devcontainers/cli",
+  "postAttachCommand": "gh auth setup-git",
   "customizations": {
     "vscode": {
       "settings": {
