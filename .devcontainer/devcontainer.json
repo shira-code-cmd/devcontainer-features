@@ -2,17 +2,19 @@
   "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:4.1.3": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:4.1.3": {},
+    "ghcr.io/dirien/devcontainer-features/opencode:0": {}
   },
   "mounts": [
-    "source=/Users/shira/.cline,target=/home/node/.cline,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.local/share/opencode,target=/home/node/.local/share/opencode,type=bind",
+    "source=${localEnv:HOME}/.config/opencode,target=/home/node/.config/opencode,type=bind",
+    "source=${localEnv:HOME}/.local/state/opencode,target=/home/node/.local/state/opencode,type=bind"
   ],
   "runArgs": [
     "--env-file=${localWorkspaceFolder}/.devcontainer/devcontainer.env"
   ],
-  "remoteUser": "node",
-  "initializeCommand": "mkdir -p .devcontainer && echo GH_TOKEN=$(gh auth token --user shira-code-cmd) > .devcontainer/devcontainer.env ",
-  "postCreateCommand": "git config --global user.name 'shira-code-cmd' && git config --global user.email 'marty.go.go.pooh@gmail.com' && npm install -g @devcontainers/cli",
+  "initializeCommand": "mkdir -p .devcontainer ${localEnv:HOME}/.config/opencode ${localEnv:HOME}/.local/share/opencode ${localEnv:HOME}/.local/state/opencode && echo GH_TOKEN=$(gh auth token --user shira-code-cmd) > .devcontainer/devcontainer.env ",
+  "postCreateCommand": "git config --global user.name 'shira-code-cmd' && git config --global user.email 'marty.go.go.pooh@gmail.com' && npm install -g @devcontainers/cli && opencode upgrade 2.3.2 --major",
   "postAttachCommand": "gh auth setup-git",
   "customizations": {
     "vscode": {
@@ -26,7 +28,6 @@
       },
       "extensions": [
         "mads-hartmann.bash-ide-vscode",
-        "saoudrizwan.claude-dev",
         "esbenp.prettier-vscode",
         "mhutchie.git-graph"
       ]

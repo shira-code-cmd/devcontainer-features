@@ -9,6 +9,7 @@
 | --- | --- |
 | [`my-setup`](src/my-setup) | 共通の VS Code 拡張・設定（Prettier、Git 系、Container Tools）と zsh |
 | [`python`](src/python) | Python 向けの VS Code 拡張・設定（Python、Ruff） |
+| [`opencode`](src/opencode) | OpenCode 本体と、設定・データの永続化マウント |
 
 `python` Feature は VS Code の設定だけを提供します。Python 本体や pip パッケージはベースイメージ／プロジェクト側で用意してください。
 
@@ -20,6 +21,7 @@
   "features": {
     "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:2": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/python:1": {},
+    "ghcr.io/shira-code-cmd/devcontainer-features/opencode:1": {},
     "ghcr.io/devcontainers/features/node:2.1.2": {}
   },
   "postCreateCommand": "pip install -r requirements.txt"
@@ -49,6 +51,23 @@
   - Python の環境マネージャー: `ms-python.python:system`
   - 型チェック: `standard`
   - Python ファイルのフォーマッター: Ruff
+
+### `opencode`
+
+- OpenCode 本体は `ghcr.io/dirien/devcontainer-features/opencode` でインストールします（`dependsOn` で自動的に入るため、併記は不要です）
+- `ghcr.io/devcontainers/features/common-utils` も依存として入ります
+- コンテナ作成時に `opencode upgrade 2.3.2 --major` を実行して V2 に更新します
+- 以下のホスト側ディレクトリを bind mount し、設定・データを永続化します
+  - `~/.config/opencode`
+  - `~/.local/share/opencode`
+  - `~/.local/state/opencode`
+- コンテナ内の `~/.config/opencode` などは `/mnt/opencode/*` への symlink になります
+- `${localEnv:HOME}` を使うため、ホストのホームディレクトリ配下に上記ディレクトリが必要です。このリポジトリの devcontainer では `initializeCommand` で作成しています
+- 別プロジェクトで使う場合は、事前にホスト側で以下を実行してください
+
+  ```bash
+  mkdir -p ~/.config/opencode ~/.local/share/opencode ~/.local/state/opencode
+  ```
 
 ## 開発
 

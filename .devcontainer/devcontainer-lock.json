@@ -9,6 +9,11 @@
       "version": "1.1.3",
       "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:bd7ab48a832228f633239277552c30b353867fef2e5b037e064b4e64f0b843f2",
       "integrity": "sha256:bd7ab48a832228f633239277552c30b353867fef2e5b037e064b4e64f0b843f2"
+    },
+    "ghcr.io/dirien/devcontainer-features/opencode:0": {
+      "version": "0.0.7",
+      "resolved": "ghcr.io/dirien/devcontainer-features/opencode@sha256:5508ee25a18cdf13daf5b5849513305558b3b8ba41f6977ea68cd2ad2268ba2b",
+      "integrity": "sha256:5508ee25a18cdf13daf5b5849513305558b3b8ba41f6977ea68cd2ad2268ba2b"
     }
   }
 }
