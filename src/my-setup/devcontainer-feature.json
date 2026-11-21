@@ -1,21 +1,22 @@
 {
   "name": "My Setup",
   "id": "my-setup",
-  "version": "1.0.0",
-  "description": "自分の共通開発環境",
-  "options": {
-    "installTools": {
-      "type": "boolean",
-      "default": true,
-      "description": "ripgrepなどを入れる"
-    }
-  },
+  "version": "2.0.0",
+  "description": "自分の共通開発環境（VS Code拡張・設定・zsh）",
   "customizations": {
     "vscode": {
       "extensions": [
+        "ms-azuretools.vscode-containers",
         "esbenp.prettier-vscode",
+        "mhutchie.git-graph",
+        "donjayamanne.githistory",
         "eamodio.gitlens"
-      ]
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+      }
     }
   }
 }

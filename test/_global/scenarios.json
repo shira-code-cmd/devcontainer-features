@@ -1,15 +1,10 @@
 {
-    "my_setup_with_common_utils": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "python_project": {
+        "image": "mcr.microsoft.com/devcontainers/python:3.14-trixie",
         "features": {
-            "ghcr.io/devcontainers/features/common-utils:2": {
-                "installZsh": true,
-                "installOhMyZsh": false,
-                "upgradePackages": false
-            },
-            "my-setup": {
-                "installTools": true
-            }
+            "my-setup": {},
+            "python": {},
+            "ghcr.io/devcontainers/features/node:2.1.2": {}
         }
     }
 }

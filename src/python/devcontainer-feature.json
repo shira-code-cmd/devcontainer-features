@@ -1,0 +1,21 @@
+{
+  "name": "Python",
+  "id": "python",
+  "version": "1.0.0",
+  "description": "Python向けのVS Code拡張と設定",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff"
+      ],
+      "settings": {
+        "python-envs.defaultEnvManager": "ms-python.python:system",
+        "python.analysis.typeCheckingMode": "standard",
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff"
+        }
+      }
+    }
+  }
+}
