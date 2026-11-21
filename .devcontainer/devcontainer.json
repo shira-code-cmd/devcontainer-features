@@ -26,7 +26,8 @@
       "extensions": [
         "mads-hartmann.bash-ide-vscode",
         "saoudrizwan.claude-dev",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "mhutchie.git-graph"
       ]
     }
   }
