@@ -1,12 +1,14 @@
 {
-    "color_and_hello": {
+    "my_setup_with_common_utils": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
-            "color": {
-                "favorite": "purple"
+            "ghcr.io/devcontainers/features/common-utils:2": {
+                "installZsh": true,
+                "installOhMyZsh": false,
+                "upgradePackages": false
             },
-            "hello": {
-                "greeting": "Greetings"
+            "my-setup": {
+                "installTools": true
             }
         }
     }
