@@ -38,6 +38,20 @@
 }
 ```
 
+### このリポジトリ自身での利用
+
+このリポジトリの [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json) も、公開済みの Feature（`git-config` と `claude`）を `ghcr.io` から参照して使っています。
+
+- `src/` を変更しても、公開（リリース）されるまでこのリポジトリの開発環境には反映されません
+- 開発中の Feature を手元で試したいときは、`features` に `./features/<name>` を指定し、`initializeCommand` で `src/<name>` を `.devcontainer/features/<name>` にコピーしてください（ローカル Feature は `.devcontainer/` 配下にしか置けないため）
+
+  ```jsonc
+  "features": { "./features/claude": {} },
+  "initializeCommand": "rm -rf .devcontainer/features/claude && mkdir -p .devcontainer/features && cp -R src/claude .devcontainer/features/claude"
+  ```
+
+- `.devcontainer/features/` を使う場合は `.gitignore` に追加してください
+
 ### `git-config`
 
 - `gitUserName` / `gitUserEmail` を指定すると、`git config --global` に名前とメールを設定します（空の場合は設定しません）
@@ -96,7 +110,7 @@
   - `~/.local/share/opencode`
   - `~/.local/state/opencode`
 - コンテナ内の `~/.config/opencode` などは `/mnt/opencode/*` への symlink になります
-- `${localEnv:HOME}` を使うため、ホストのホームディレクトリ配下に上記ディレクトリが必要です。このリポジトリの devcontainer では `initializeCommand` で作成しています
+- `${localEnv:HOME}` を使うため、ホストのホームディレクトリ配下に上記ディレクトリが必要です。存在しないと bind mount に失敗します（このリポジトリの devcontainer は、ホスト側に作成済みであることを前提にしています）
 - 別プロジェクトで使う場合は、事前にホスト側で以下を実行してください
 
   ```bash
