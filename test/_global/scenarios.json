@@ -3,6 +3,7 @@
         "image": "mcr.microsoft.com/devcontainers/python:3.14-trixie",
         "features": {
             "my-setup": {},
+            "zsh": {},
             "python": {},
             "ghcr.io/devcontainers/features/node:2.1.2": {}
         }

@@ -7,6 +7,7 @@
 #
 # It verifies the combination used by a real Python project:
 #   - my-setup provides the common VS Code configuration and zsh
+#   - zsh provides starship and the zsh shell configuration
 #   - python provides the Python VS Code configuration
 #   - the official node Feature installs Node.js
 #
@@ -20,6 +21,10 @@ source dev-container-features-test-lib
 
 # zsh is installed by 'my-setup' (or already present in the base image)
 check "zsh is available" bash -c "command -v zsh"
+
+# starship and the zsh configuration are provided by the 'zsh' Feature
+check "starship is available" bash -c "command -v starship"
+check "zshrc has the managed block" bash -c "grep -q '# >>> zsh feature >>>' \"$HOME/.zshrc\""
 
 # Python comes from the base image
 check "python is available" bash -c "command -v python"

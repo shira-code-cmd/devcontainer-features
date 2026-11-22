@@ -9,6 +9,7 @@
 | --- | --- |
 | [`git-config`](src/git-config) | Git のユーザー設定と GitHub CLI の認証連携 |
 | [`my-setup`](src/my-setup) | 共通の VS Code 拡張・設定（Prettier、Git 系、Container Tools）と zsh |
+| [`zsh`](src/zsh) | starship・自動提案・シンタックスハイライト付きの zsh 環境 |
 | [`python`](src/python) | Python 向けの VS Code 拡張・設定（Python、Ruff） |
 | [`opencode`](src/opencode) | OpenCode 本体と、設定・データの永続化マウント |
 
@@ -25,6 +26,7 @@
       "gitUserEmail": "you@example.com"
     },
     "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:2": {},
+    "ghcr.io/shira-code-cmd/devcontainer-features/zsh:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/python:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/opencode:1": {},
     "ghcr.io/devcontainers/features/node:2.1.2": {}
@@ -56,6 +58,18 @@
   - 保存時フォーマット: 有効
   - Linux のデフォルトターミナル: zsh
 - zsh がなければ apt でインストールします（Debian / Ubuntu 系イメージが対象）
+- シェルの設定（starship・プラグインなど）は [`zsh`](#zsh) Feature を使います
+
+### `zsh`
+
+- zsh がなければ apt でインストールします（Debian / Ubuntu 系イメージが対象）
+- 有効なオプションに応じて以下を導入します
+  - `starship`（公式インストーラで `/usr/local/bin` にインストール）
+  - `zsh-autosuggestions`
+  - `zsh-syntax-highlighting`
+- リモートユーザーの `~/.zshrc` に管理ブロックを追記します（既存の設定は保持し、再実行時はブロックだけ置き換えます）
+- VS Code の Linux デフォルトターミナルを zsh に設定します
+- オプション `starship` / `autosuggestions` / `syntaxHighlighting` で個別に無効化できます
 
 ### `python`
 

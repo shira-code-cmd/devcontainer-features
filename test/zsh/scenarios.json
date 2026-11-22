@@ -1,0 +1,18 @@
+{
+    "disabled": {
+        "image": "debian:latest",
+        "features": {
+            "zsh": {
+                "starship": false,
+                "autosuggestions": false,
+                "syntaxHighlighting": false
+            }
+        }
+    },
+    "existing_zshrc": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "zsh": {}
+        }
+    }
+}
