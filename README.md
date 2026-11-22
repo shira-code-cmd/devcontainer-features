@@ -12,6 +12,7 @@
 | [`zsh`](src/zsh) | starship・自動提案・シンタックスハイライト付きの zsh 環境 |
 | [`python`](src/python) | Python 向けの VS Code 拡張・設定（Python、Ruff） |
 | [`opencode`](src/opencode) | OpenCode 本体と、設定・データの永続化マウント |
+| [`claude`](src/claude) | Claude Code 本体と、設定・認証情報の永続化マウント |
 
 `python` Feature は VS Code の設定だけを提供します。Python 本体や pip パッケージはベースイメージ／プロジェクト側で用意してください。
 
@@ -29,9 +30,10 @@
     "ghcr.io/shira-code-cmd/devcontainer-features/zsh:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/python:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/opencode:1": {},
+    "ghcr.io/shira-code-cmd/devcontainer-features/claude:1": {},
     "ghcr.io/devcontainers/features/node:2.1.2": {}
   },
-  "initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh",
+  "initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh ${localEnv:HOME}/.claude",
   "postCreateCommand": "pip install -r requirements.txt"
 }
 ```
@@ -44,6 +46,9 @@
 - `github.com` / `gist.github.com` の credential helper に `!gh auth git-credential` を設定します（`gh auth setup-git` 相当）
 - ホスト側で `gh auth login` 済みである必要があります。`~/.config/gh` がない場合は未認証のまま起動します
 - `initializeCommand` で `~/.config/gh` を作成しておくと、Docker が root 所有の空ディレクトリを作るのを防げます
+- ホストの `gh` がトークンを OS のキーチェーン（macOS の Keychain など）に保存している場合、共有される `hosts.yml` にはユーザー名しか書かれず、コンテナ内の `gh` は「token invalid」になります。リビルドしても直りません
+  - コンテナ内で `gh auth login` を一度実行してください。キーチェーンがないためトークンは `hosts.yml` に平文で保存され、ホストと共有されるのでリビルド後も残ります
+  - `git push` だけは、VS Code がホストの認証情報を転送するため `gh` の状態に関係なく動きます
 
 ### `my-setup`
 
@@ -96,6 +101,22 @@
 
   ```bash
   mkdir -p ~/.config/opencode ~/.local/share/opencode ~/.local/state/opencode
+  ```
+
+### `claude`
+
+- Claude Code 本体は `ghcr.io/anthropics/devcontainer-features/claude-code` でインストールします（`dependsOn` で自動的に入るため、併記は不要です）
+- Node.js が必要なため、`ghcr.io/devcontainers/features/common-utils` と `ghcr.io/devcontainers/features/node` も依存として入ります
+- ホストの `~/.claude` を `/mnt/claude/config` に bind mount し、`CLAUDE_CONFIG_DIR=/mnt/claude/config` を設定します
+- コンテナ内の `~/.claude` は `/mnt/claude/config` への symlink になります
+- 通常 `~/.claude.json` に保存される状態ファイルは、`CLAUDE_CONFIG_DIR` により `~/.claude/.claude.json`（ホスト側）に保存されます
+  - Claude Code はこのファイルを一時ファイル経由の rename で更新するため、ファイル単位の bind mount や symlink とは相性が悪く、この方式にしています
+  - そのため、ホストの `~/.claude.json` はコンテナと共有されません。初回起動時にオンボーディングが表示されることがあります
+- macOS ホストでは認証情報が Keychain に保存されるため、ログイン状態は引き継がれません。コンテナ内で一度 `/login` すると `~/.claude/.credentials.json` に保存され、以降のリビルドでも維持されます
+- 別プロジェクトで使う場合は、事前にホスト側で以下を実行するか、`initializeCommand` で作成してください
+
+  ```bash
+  mkdir -p ~/.claude
   ```
 
 ## 開発
