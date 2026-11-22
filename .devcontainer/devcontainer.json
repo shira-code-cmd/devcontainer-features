@@ -6,14 +6,15 @@
       "gitUserEmail": "marty.go.go.pooh@gmail.com"
     },
     "ghcr.io/devcontainers/features/docker-in-docker:4.1.3": {},
-    "ghcr.io/dirien/devcontainer-features/opencode:0": {}
+    "ghcr.io/dirien/devcontainer-features/opencode:0": {},
+    "./features/claude": {}
   },
   "mounts": [
     "source=${localEnv:HOME}/.local/share/opencode,target=/home/node/.local/share/opencode,type=bind",
     "source=${localEnv:HOME}/.config/opencode,target=/home/node/.config/opencode,type=bind",
     "source=${localEnv:HOME}/.local/state/opencode,target=/home/node/.local/state/opencode,type=bind"
   ],
-  "initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh ${localEnv:HOME}/.config/opencode ${localEnv:HOME}/.local/share/opencode ${localEnv:HOME}/.local/state/opencode && rm -rf .devcontainer/features/git-config && mkdir -p .devcontainer/features && cp -R src/git-config .devcontainer/features/git-config",
+  "initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh ${localEnv:HOME}/.config/opencode ${localEnv:HOME}/.local/share/opencode ${localEnv:HOME}/.local/state/opencode ${localEnv:HOME}/.claude && rm -rf .devcontainer/features/git-config .devcontainer/features/claude && mkdir -p .devcontainer/features && cp -R src/git-config .devcontainer/features/git-config && cp -R src/claude .devcontainer/features/claude",
   "postCreateCommand": "npm install -g @devcontainers/cli && opencode upgrade 2.3.2 --major",
   "customizations": {
     "vscode": {
