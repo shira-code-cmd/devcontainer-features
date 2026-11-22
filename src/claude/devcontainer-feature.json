@@ -1,15 +1,13 @@
 {
   "name": "Claude Code",
   "id": "claude",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Claude Code と設定・認証情報の永続化",
   "documentationURL": "https://docs.claude.com/en/docs/claude-code",
   "dependsOn": {
+    "ghcr.io/devcontainers/features/node:2.1.2": {},
     "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
   },
-  "installsAfter": [
-    "ghcr.io/devcontainers/features/node"
-  ],
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/mnt/claude/config"
   },
