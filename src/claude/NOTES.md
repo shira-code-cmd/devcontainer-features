@@ -6,7 +6,8 @@
 
 ## 前提
 
-ホストに `~/.claude` ディレクトリが存在する必要があります。`devcontainer.json` の `initializeCommand` で作成してください。
+- Node.js が必要です。`mcr.microsoft.com/devcontainers/javascript-node` など Node.js 入りのイメージを使うか、`ghcr.io/devcontainers/features/node` を併記してください。
+- ホストに `~/.claude` ディレクトリが存在する必要があります。`devcontainer.json` の `initializeCommand` で作成してください。
 
 ```json
 "initializeCommand": "mkdir -p ${localEnv:HOME}/.claude"

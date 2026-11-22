@@ -33,6 +33,12 @@ jobs:
           - debian:latest
           - ubuntu:latest
           - mcr.microsoft.com/devcontainers/base:ubuntu
+        # claude は Node.js が入っているイメージを前提にする（Node の導入に時間がかかるため）
+        exclude:
+          - feature: claude
+        include:
+          - feature: claude
+            baseImage: mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
     steps:
       - uses: actions/checkout@v5
 

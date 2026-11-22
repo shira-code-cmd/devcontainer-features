@@ -30,7 +30,7 @@
     "ghcr.io/shira-code-cmd/devcontainer-features/zsh:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/python:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/opencode:1": {},
-    "ghcr.io/shira-code-cmd/devcontainer-features/claude:1": {},
+    "ghcr.io/shira-code-cmd/devcontainer-features/claude:2": {},
     "ghcr.io/devcontainers/features/node:2.1.2": {}
   },
   "initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh ${localEnv:HOME}/.claude",
@@ -106,7 +106,7 @@
 ### `claude`
 
 - Claude Code 本体は `ghcr.io/anthropics/devcontainer-features/claude-code` でインストールします（`dependsOn` で自動的に入るため、併記は不要です）
-- Node.js が必要なため、`ghcr.io/devcontainers/features/common-utils` と `ghcr.io/devcontainers/features/node` も依存として入ります
+- **Node.js が必要です**。`mcr.microsoft.com/devcontainers/javascript-node` のように Node.js が入ったイメージを使うか、`ghcr.io/devcontainers/features/node` を併記してください（`python` Feature と同様に、ランタイムはベースイメージ／プロジェクト側で用意する方針です。`1.x` までは Node.js も自動で入れていましたが、テストと構築が遅くなるため `2.0.0` で外しました）
 - ホストの `~/.claude` を `/mnt/claude/config` に bind mount し、`CLAUDE_CONFIG_DIR=/mnt/claude/config` を設定します
 - コンテナ内の `~/.claude` は `/mnt/claude/config` への symlink になります
 - 通常 `~/.claude.json` に保存される状態ファイルは、`CLAUDE_CONFIG_DIR` により `~/.claude/.claude.json`（ホスト側）に保存されます
