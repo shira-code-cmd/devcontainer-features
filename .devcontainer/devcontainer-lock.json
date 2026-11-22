@@ -20,15 +20,41 @@
       "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:bd7ab48a832228f633239277552c30b353867fef2e5b037e064b4e64f0b843f2",
       "integrity": "sha256:bd7ab48a832228f633239277552c30b353867fef2e5b037e064b4e64f0b843f2"
     },
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "1.7.1",
-      "resolved": "ghcr.io/devcontainers/features/node@sha256:8c0de46939b61958041700ee89e3493f3b2e4131a06dc46b4d9423427d06e5f6",
-      "integrity": "sha256:8c0de46939b61958041700ee89e3493f3b2e4131a06dc46b4d9423427d06e5f6"
+    "ghcr.io/devcontainers/features/node:2.1.2": {
+      "version": "2.1.2",
+      "resolved": "ghcr.io/devcontainers/features/node@sha256:20ac718cc67e7999a9d3fbb8387f1a3a5d53ecbd41fe7c075ebadb8e9b431b17",
+      "integrity": "sha256:20ac718cc67e7999a9d3fbb8387f1a3a5d53ecbd41fe7c075ebadb8e9b431b17"
     },
     "ghcr.io/dirien/devcontainer-features/opencode:0": {
       "version": "0.0.7",
       "resolved": "ghcr.io/dirien/devcontainer-features/opencode@sha256:5508ee25a18cdf13daf5b5849513305558b3b8ba41f6977ea68cd2ad2268ba2b",
       "integrity": "sha256:5508ee25a18cdf13daf5b5849513305558b3b8ba41f6977ea68cd2ad2268ba2b"
+    },
+    "ghcr.io/shira-code-cmd/devcontainer-features/claude:2": {
+      "version": "2.1.0",
+      "resolved": "ghcr.io/shira-code-cmd/devcontainer-features/claude@sha256:ecf82861dac3415f9d6f21c1f27717bf4b09e2b938f9c6549e0dda10e3caeb8e",
+      "integrity": "sha256:ecf82861dac3415f9d6f21c1f27717bf4b09e2b938f9c6549e0dda10e3caeb8e",
+      "dependsOn": [
+        "ghcr.io/devcontainers/features/node:2.1.2",
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1"
+      ]
+    },
+    "ghcr.io/shira-code-cmd/devcontainer-features/git-config:1": {
+      "version": "1.0.0",
+      "resolved": "ghcr.io/shira-code-cmd/devcontainer-features/git-config@sha256:f79c4da4d8bb3b5a3f5c6f248e2ddd91a61c2b361db463c42de64f866f5e02d6",
+      "integrity": "sha256:f79c4da4d8bb3b5a3f5c6f248e2ddd91a61c2b361db463c42de64f866f5e02d6",
+      "dependsOn": [
+        "ghcr.io/devcontainers/features/github-cli:1"
+      ]
+    },
+    "ghcr.io/shira-code-cmd/devcontainer-features/opencode:1": {
+      "version": "1.0.0",
+      "resolved": "ghcr.io/shira-code-cmd/devcontainer-features/opencode@sha256:17495f923be8f2551c593084d11140b4882635ace65c20f7dd2a44eee33ce1b9",
+      "integrity": "sha256:17495f923be8f2551c593084d11140b4882635ace65c20f7dd2a44eee33ce1b9",
+      "dependsOn": [
+        "ghcr.io/devcontainers/features/common-utils:2",
+        "ghcr.io/dirien/devcontainer-features/opencode:0"
+      ]
     }
   }
 }
