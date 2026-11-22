@@ -106,7 +106,7 @@
 ### `claude`
 
 - Claude Code 本体は `ghcr.io/anthropics/devcontainer-features/claude-code` でインストールします（`dependsOn` で自動的に入るため、併記は不要です）
-- **Node.js が必要です**。`mcr.microsoft.com/devcontainers/javascript-node` のように Node.js が入ったイメージを使うか、`ghcr.io/devcontainers/features/node` を併記してください（`python` Feature と同様に、ランタイムはベースイメージ／プロジェクト側で用意する方針です。`1.x` までは Node.js も自動で入れていましたが、テストと構築が遅くなるため `2.0.0` で外しました）
+- Node.js を `ghcr.io/devcontainers/features/node` の `dependsOn` で自動的に入れます（`2.0.0` では外していましたが、Node がない環境で Claude Code のインストールが失敗するため `2.1.0` で戻しました。テストと構築は遅くなります）
 - ホストの `~/.claude` を `/mnt/claude/config` に bind mount し、`CLAUDE_CONFIG_DIR=/mnt/claude/config` を設定します
 - コンテナ内の `~/.claude` は `/mnt/claude/config` への symlink になります
 - 通常 `~/.claude.json` に保存される状態ファイルは、`CLAUDE_CONFIG_DIR` により `~/.claude/.claude.json`（ホスト側）に保存されます
