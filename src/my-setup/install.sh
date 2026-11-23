@@ -202,6 +202,9 @@ link_dir "${USER_HOME}/.claude" /mnt/claude/config
 
 mkdir -p /mnt/opencode/config /mnt/opencode/data /mnt/opencode/state
 chown -R "${USER_NAME}:${USER_GROUP}" /mnt/opencode
+# /mnt/opencode/data is a named volume (root-owned at first, and the owner UID may
+# change via updateRemoteUserUID). Keep it writable regardless, like the zsh history.
+chmod 1777 /mnt/opencode/data
 
 link_dir "${USER_HOME}/.config/opencode" /mnt/opencode/config
 link_dir "${USER_HOME}/.local/share/opencode" /mnt/opencode/data
