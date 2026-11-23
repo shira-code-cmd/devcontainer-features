@@ -15,7 +15,32 @@
 
 ### 3.x からの移行
 
-`python` / `opencode` / `claude` の各 Feature はソースを削除しました（公開済みの旧バージョンは ghcr に残ります）。`features` から外し、`my-setup` を `:4` にしてください。`initializeCommand` にホスト側ディレクトリの作成が必要です（bind mount 元が無いとコンテナ起動に失敗します）。
+`python` / `opencode` / `claude` の各 Feature はソースを削除しました（公開済みの旧バージョンは ghcr に残ります）。`features` から外し、`my-setup` を `:5` 以降にしてください。5.0.0 以降は、ホスト側の環境変数 `MY_DEVCONTAINER_DATA_DIR` と、その配下のディレクトリが必要です（[ホスト側の準備](#ホスト側の準備)を参照）。
+
+## ホスト側の準備
+
+`my-setup` は、認証情報・設定・履歴をホストの専用ディレクトリに bind mount して永続化します（名前付きボリュームは使いません）。ホストの `~/.claude` や `~/.config/gh` を直接マウントしないので、コンテナ内からホスト側の CLI 設定を書き換えられません。
+
+1. ホストで環境変数 `MY_DEVCONTAINER_DATA_DIR` を設定します（**必須**。未設定だとコンテナの起動に失敗します）
+   ```bash
+   echo 'export MY_DEVCONTAINER_DATA_DIR="$HOME/devcontainer-data"' >> ~/.zshrc
+   ```
+   macOS で Dock や Spotlight から VS Code を起動する場合は、シェルの環境変数を引き継ぎません。ターミナルから `code .` で起動するか、`launchctl setenv` で設定してください。変更後はコンテナの再ビルドが必要です。
+2. マウント元のディレクトリを作成します（無いと起動に失敗します）
+   ```bash
+   mkdir -p "$MY_DEVCONTAINER_DATA_DIR"/{gh,zsh-history,claude,opencode/{config,data,state}}
+   ```
+
+| ホスト（`$MY_DEVCONTAINER_DATA_DIR` 配下） | コンテナ |
+| --- | --- |
+| `gh` | `/mnt/gh/config` |
+| `zsh-history` | `/mnt/zsh-history` |
+| `claude` | `/mnt/claude/config` |
+| `opencode/config` | `/mnt/opencode/config` |
+| `opencode/data` | `/mnt/opencode/data` |
+| `opencode/state` | `/mnt/opencode/state` |
+
+Syncthing などで同期する場合は、認証情報（`claude/.credentials.json`、`gh/hosts.yml`）が同期先すべてに渡ること、2 台で同時に使うと履歴 DB（`opencode/data`）が競合・破損しうることに注意してください。
 
 ## 使い方
 
@@ -23,12 +48,11 @@
 {
   "image": "mcr.microsoft.com/devcontainers/python:3.14-trixie",
   "features": {
-    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:4": {
+    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:5": {
       "gitUserName": "your-name",
       "gitUserEmail": "you@example.com"
     }
   },
-  "initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh ${localEnv:HOME}/.claude ${localEnv:HOME}/.config/opencode ${localEnv:HOME}/.local/state/opencode",
   "postCreateCommand": "pip install -r requirements.txt"
 }
 ```
@@ -75,11 +99,11 @@
 #### git / GitHub CLI
 
 - `gitUserName` / `gitUserEmail` を指定すると、`git config --global` に名前とメールを設定します（空の場合は設定しません）
-- ホストの `~/.config/gh` を `/mnt/gh/config` に bind mount し、コンテナ内の `~/.config/gh` から symlink します
+- ホストの `$MY_DEVCONTAINER_DATA_DIR/gh` を `/mnt/gh/config` に bind mount し、コンテナ内の `~/.config/gh` から symlink します
 - `gh` は `ghcr.io/devcontainers/features/github-cli` を依存としてインストールします
 - `github.com` / `gist.github.com` の credential helper に `!gh auth git-credential` を設定します（`gh auth setup-git` 相当）
-- ホスト側で `gh auth login` 済みである必要があります。`~/.config/gh` がない場合は未認証のまま起動します
-- bind mount は常に有効です。ホストに `~/.config/gh` がないと起動に失敗することがあるため、`initializeCommand` で作成しておいてください（Docker が root 所有の空ディレクトリを作るのも防げます）
+- ホストの `~/.config/gh` とは共有されないため、コンテナ内で一度 `gh auth login` を実行してください
+- bind mount は常に有効です。マウント元がないと起動に失敗するため、[ホスト側の準備](#ホスト側の準備)でディレクトリを作成してください
 - ホストの `gh` がトークンを OS のキーチェーン（macOS の Keychain など）に保存している場合、共有される `hosts.yml` にはユーザー名しか書かれず、コンテナ内の `gh` は「token invalid」になります。リビルドしても直りません
   - コンテナ内で `gh auth login` を一度実行してください。キーチェーンがないためトークンは `hosts.yml` に平文で保存され、ホストと共有されるのでリビルド後も残ります
   - `git push` だけは、VS Code がホストの認証情報を転送するため `gh` の状態に関係なく動きます
@@ -91,11 +115,11 @@
 #### Claude Code / OpenCode
 
 - 本体は `dependsOn` で導入されます（`anthropics/devcontainer-features/claude-code`、`dirien/devcontainer-features/opencode`）。Node.js も自動で入ります
-- ホストの `~/.claude` を `/mnt/claude/config` に bind mount し、`CLAUDE_CONFIG_DIR=/mnt/claude/config` を設定します（コンテナ内の `~/.claude` は symlink）
-  - 状態ファイルは `CLAUDE_CONFIG_DIR` により `~/.claude/.claude.json`（ホスト側）に保存されるため、ホストの `~/.claude.json` とは共有されません。初回起動時にオンボーディングが表示されることがあります
+- ホストの `$MY_DEVCONTAINER_DATA_DIR/claude` を `/mnt/claude/config` に bind mount し、`CLAUDE_CONFIG_DIR=/mnt/claude/config` を設定します（コンテナ内の `~/.claude` は symlink）
+  - 状態ファイルは `CLAUDE_CONFIG_DIR` により `$MY_DEVCONTAINER_DATA_DIR/claude/.claude.json`（ホスト側）に保存されるため、ホストの `~/.claude.json` とは共有されません。初回起動時にオンボーディングが表示されることがあります
   - macOS ホストでは認証情報が Keychain に保存されるため、コンテナ内で一度 `/login` してください（`~/.claude/.credentials.json` に保存され、リビルド後も維持されます）
-- OpenCode は `~/.config/opencode`、`~/.local/state/opencode` を bind mount し、`~/.local/share/opencode`（履歴 DB）は名前付きボリューム `my-setup-opencode-data` で devcontainer 間共有し、コンテナ作成時に `opencode upgrade 2.3.2 --major` を実行します
-- bind mount 元がホストに無いと起動に失敗するため、`initializeCommand` で作成してください
+- OpenCode は `$MY_DEVCONTAINER_DATA_DIR/opencode/{config,data,state}` を bind mount し（`data` は履歴 DB で、devcontainer 間で共有されます）、コンテナ作成時に `opencode upgrade 2.3.2 --major` を実行します
+- 既存の `~/.claude` を引き継ぐ場合は、Claude を終了してから `cp -a ~/.claude/. "$MY_DEVCONTAINER_DATA_DIR/claude/"` でコピーしてください
 
 ## 開発
 
