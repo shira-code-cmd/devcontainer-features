@@ -3,7 +3,13 @@ on:
   workflow_dispatch:
 
 jobs:
+  # 公開前に validate / test を通す。失敗したら deploy は走らない
+  check:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/ci.yaml
+
   deploy:
+    needs: check
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     permissions:
