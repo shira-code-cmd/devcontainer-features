@@ -28,7 +28,7 @@
       "gitUserEmail": "you@example.com"
     }
   },
-  "initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh ${localEnv:HOME}/.claude ${localEnv:HOME}/.config/opencode ${localEnv:HOME}/.local/share/opencode ${localEnv:HOME}/.local/state/opencode",
+  "initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh ${localEnv:HOME}/.claude ${localEnv:HOME}/.config/opencode ${localEnv:HOME}/.local/state/opencode",
   "postCreateCommand": "pip install -r requirements.txt"
 }
 ```
@@ -94,7 +94,7 @@
 - ホストの `~/.claude` を `/mnt/claude/config` に bind mount し、`CLAUDE_CONFIG_DIR=/mnt/claude/config` を設定します（コンテナ内の `~/.claude` は symlink）
   - 状態ファイルは `CLAUDE_CONFIG_DIR` により `~/.claude/.claude.json`（ホスト側）に保存されるため、ホストの `~/.claude.json` とは共有されません。初回起動時にオンボーディングが表示されることがあります
   - macOS ホストでは認証情報が Keychain に保存されるため、コンテナ内で一度 `/login` してください（`~/.claude/.credentials.json` に保存され、リビルド後も維持されます）
-- OpenCode は `~/.config/opencode`、`~/.local/share/opencode`、`~/.local/state/opencode` を bind mount し、コンテナ作成時に `opencode upgrade 2.3.2 --major` を実行します
+- OpenCode は `~/.config/opencode`、`~/.local/state/opencode` を bind mount し、`~/.local/share/opencode`（履歴 DB）は名前付きボリューム `my-setup-opencode-data` で devcontainer 間共有し、コンテナ作成時に `opencode upgrade 2.3.2 --major` を実行します
 - bind mount 元がホストに無いと起動に失敗するため、`initializeCommand` で作成してください
 
 ## 開発
