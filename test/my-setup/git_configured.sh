@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This test verifies the 'configured' scenario in scenarios.json, where both
+# This test verifies the 'git_configured' scenario in scenarios.json, where both
 # 'gitUserName' and 'gitUserEmail' are provided.
 
 set -e

@@ -1,8 +1,45 @@
 {
   "name": "My Setup",
   "id": "my-setup",
-  "version": "2.0.0",
-  "description": "自分の共通開発環境（VS Code拡張・設定・zsh）",
+  "version": "3.0.0",
+  "description": "自分の共通開発環境（VS Code拡張・設定・zsh・git/gh連携）",
+  "options": {
+    "gitUserName": {
+      "type": "string",
+      "default": "",
+      "description": "git config --global user.name に設定する値（空の場合は設定しない）"
+    },
+    "gitUserEmail": {
+      "type": "string",
+      "default": "",
+      "description": "git config --global user.email に設定する値（空の場合は設定しない）"
+    },
+    "starship": {
+      "type": "boolean",
+      "default": true,
+      "description": "starship プロンプトをインストールして ~/.zshrc で初期化する"
+    },
+    "autosuggestions": {
+      "type": "boolean",
+      "default": true,
+      "description": "zsh-autosuggestions をインストールして ~/.zshrc で読み込む"
+    },
+    "syntaxHighlighting": {
+      "type": "boolean",
+      "default": true,
+      "description": "zsh-syntax-highlighting をインストールして ~/.zshrc で読み込む"
+    }
+  },
+  "dependsOn": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "mounts": [
+    {
+      "type": "bind",
+      "source": "${localEnv:HOME}/.config/gh",
+      "target": "/mnt/gh/config"
+    }
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
