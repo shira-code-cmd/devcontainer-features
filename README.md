@@ -8,9 +8,6 @@
 | Feature | 内容 |
 | --- | --- |
 | [`my-setup`](src/my-setup) | 共通の VS Code 拡張・設定（Python / Ruff 含む）、zsh 環境（starship など）、Git のユーザー設定と GitHub CLI 連携、Node.js、Claude Code、OpenCode と、それぞれの設定・認証情報の永続化マウント |
-| [`python`](src/python) | **非推奨**: `my-setup` に統合されました |
-| [`opencode`](src/opencode) | **非推奨**: `my-setup` に統合されました |
-| [`claude`](src/claude) | **非推奨**: `my-setup` に統合されました |
 
 `my-setup` は VS Code の Python 設定だけを提供します。Python 本体や pip パッケージはベースイメージ／プロジェクト側で用意してください。
 
@@ -18,7 +15,7 @@
 
 ### 3.x からの移行
 
-`python` / `opencode` / `claude` の各 Feature を `features` から外し、`my-setup` を `:4` にしてください。`initializeCommand` にホスト側ディレクトリの作成が必要です（bind mount 元が無いとコンテナ起動に失敗します）。
+`python` / `opencode` / `claude` の各 Feature はソースを削除しました（公開済みの旧バージョンは ghcr に残ります）。`features` から外し、`my-setup` を `:4` にしてください。`initializeCommand` にホスト側ディレクトリの作成が必要です（bind mount 元が無いとコンテナ起動に失敗します）。
 
 ## 使い方
 
@@ -44,8 +41,8 @@
 - 開発中の Feature を手元で試したいときは、`features` に `./features/<name>` を指定し、`initializeCommand` で `src/<name>` を `.devcontainer/features/<name>` にコピーしてください（ローカル Feature は `.devcontainer/` 配下にしか置けないため）
 
   ```jsonc
-  "features": { "./features/claude": {} },
-  "initializeCommand": "rm -rf .devcontainer/features/claude && mkdir -p .devcontainer/features && cp -R src/claude .devcontainer/features/claude"
+  "features": { "./features/my-setup": {} },
+  "initializeCommand": "rm -rf .devcontainer/features/my-setup && mkdir -p .devcontainer/features && cp -R src/my-setup .devcontainer/features/my-setup"
   ```
 
 - `.devcontainer/features/` を使う場合は `.gitignore` に追加してください
@@ -91,48 +88,14 @@
 
 `git-config` と `zsh` Feature は廃止しました（公開済みの旧バージョンは ghcr に残ります）。`my-setup:3` に置き換え、`git-config` のオプションをそのまま `my-setup` に渡してください。
 
-### `python`
+#### Claude Code / OpenCode
 
-- VS Code 拡張
-  - `ms-python.python`
-  - `charliermarsh.ruff`
-- VS Code 設定
-  - Python の環境マネージャー: `ms-python.python:system`
-  - 型チェック: `standard`
-  - Python ファイルのフォーマッター: Ruff
-
-### `opencode`
-
-- OpenCode 本体は `ghcr.io/dirien/devcontainer-features/opencode` でインストールします（`dependsOn` で自動的に入るため、併記は不要です）
-- `ghcr.io/devcontainers/features/common-utils` も依存として入ります
-- コンテナ作成時に `opencode upgrade 2.3.2 --major` を実行して V2 に更新します
-- 以下のホスト側ディレクトリを bind mount し、設定・データを永続化します
-  - `~/.config/opencode`
-  - `~/.local/share/opencode`
-  - `~/.local/state/opencode`
-- コンテナ内の `~/.config/opencode` などは `/mnt/opencode/*` への symlink になります
-- `${localEnv:HOME}` を使うため、ホストのホームディレクトリ配下に上記ディレクトリが必要です。存在しないと bind mount に失敗します（このリポジトリの devcontainer は、ホスト側に作成済みであることを前提にしています）
-- 別プロジェクトで使う場合は、事前にホスト側で以下を実行してください
-
-  ```bash
-  mkdir -p ~/.config/opencode ~/.local/share/opencode ~/.local/state/opencode
-  ```
-
-### `claude`
-
-- Claude Code 本体は `ghcr.io/anthropics/devcontainer-features/claude-code` でインストールします（`dependsOn` で自動的に入るため、併記は不要です）
-- Node.js を `ghcr.io/devcontainers/features/node` の `dependsOn` で自動的に入れます（`2.0.0` では外していましたが、Node がない環境で Claude Code のインストールが失敗するため `2.1.0` で戻しました。テストと構築は遅くなります）
-- ホストの `~/.claude` を `/mnt/claude/config` に bind mount し、`CLAUDE_CONFIG_DIR=/mnt/claude/config` を設定します
-- コンテナ内の `~/.claude` は `/mnt/claude/config` への symlink になります
-- 通常 `~/.claude.json` に保存される状態ファイルは、`CLAUDE_CONFIG_DIR` により `~/.claude/.claude.json`（ホスト側）に保存されます
-  - Claude Code はこのファイルを一時ファイル経由の rename で更新するため、ファイル単位の bind mount や symlink とは相性が悪く、この方式にしています
-  - そのため、ホストの `~/.claude.json` はコンテナと共有されません。初回起動時にオンボーディングが表示されることがあります
-- macOS ホストでは認証情報が Keychain に保存されるため、ログイン状態は引き継がれません。コンテナ内で一度 `/login` すると `~/.claude/.credentials.json` に保存され、以降のリビルドでも維持されます
-- 別プロジェクトで使う場合は、事前にホスト側で以下を実行するか、`initializeCommand` で作成してください
-
-  ```bash
-  mkdir -p ~/.claude
-  ```
+- 本体は `dependsOn` で導入されます（`anthropics/devcontainer-features/claude-code`、`dirien/devcontainer-features/opencode`）。Node.js も自動で入ります
+- ホストの `~/.claude` を `/mnt/claude/config` に bind mount し、`CLAUDE_CONFIG_DIR=/mnt/claude/config` を設定します（コンテナ内の `~/.claude` は symlink）
+  - 状態ファイルは `CLAUDE_CONFIG_DIR` により `~/.claude/.claude.json`（ホスト側）に保存されるため、ホストの `~/.claude.json` とは共有されません。初回起動時にオンボーディングが表示されることがあります
+  - macOS ホストでは認証情報が Keychain に保存されるため、コンテナ内で一度 `/login` してください（`~/.claude/.credentials.json` に保存され、リビルド後も維持されます）
+- OpenCode は `~/.config/opencode`、`~/.local/share/opencode`、`~/.local/state/opencode` を bind mount し、コンテナ作成時に `opencode upgrade 2.3.2 --major` を実行します
+- bind mount 元がホストに無いと起動に失敗するため、`initializeCommand` で作成してください
 
 ## 開発
 
