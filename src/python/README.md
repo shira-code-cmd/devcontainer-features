@@ -1,9 +1,9 @@
-> **非推奨**: この Feature は `my-setup` に統合されました。
-
+### **IMPORTANT NOTE**
+- **This Feature is deprecated, and will no longer receive any further updates/support.**
 
 # Python (python)
 
-Python向けのVS Code拡張と設定
+[非推奨: my-setup に統合] Python向けのVS Code拡張と設定
 
 ## Example Usage
 

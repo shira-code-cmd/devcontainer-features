@@ -1,9 +1,9 @@
-> **非推奨**: この Feature は `my-setup` に統合されました。
-
+### **IMPORTANT NOTE**
+- **This Feature is deprecated, and will no longer receive any further updates/support.**
 
 # OpenCode (opencode)
 
-OpenCode と設定・データの永続化
+[非推奨: my-setup に統合] OpenCode と設定・データの永続化
 
 ## Example Usage
 
