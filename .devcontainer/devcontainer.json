@@ -1,7 +1,7 @@
 {
   "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
   "features": {
-    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:4": {
+    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:4.1.0": {
       "gitUserName": "shira-code-cmd",
       "gitUserEmail": "marty.go.go.pooh@gmail.com"
     },

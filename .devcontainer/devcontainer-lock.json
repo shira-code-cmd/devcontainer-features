@@ -30,29 +30,15 @@
       "resolved": "ghcr.io/dirien/devcontainer-features/opencode@sha256:5508ee25a18cdf13daf5b5849513305558b3b8ba41f6977ea68cd2ad2268ba2b",
       "integrity": "sha256:5508ee25a18cdf13daf5b5849513305558b3b8ba41f6977ea68cd2ad2268ba2b"
     },
-    "ghcr.io/shira-code-cmd/devcontainer-features/claude:2": {
-      "version": "2.1.0",
-      "resolved": "ghcr.io/shira-code-cmd/devcontainer-features/claude@sha256:ecf82861dac3415f9d6f21c1f27717bf4b09e2b938f9c6549e0dda10e3caeb8e",
-      "integrity": "sha256:ecf82861dac3415f9d6f21c1f27717bf4b09e2b938f9c6549e0dda10e3caeb8e",
+    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:4.1.0": {
+      "version": "4.1.0",
+      "resolved": "ghcr.io/shira-code-cmd/devcontainer-features/my-setup@sha256:954b60749e342e6daf99b96c1bfd5ea85dbb0788a5c806316c1093739290ac57",
+      "integrity": "sha256:954b60749e342e6daf99b96c1bfd5ea85dbb0788a5c806316c1093739290ac57",
       "dependsOn": [
-        "ghcr.io/devcontainers/features/node:2.1.2",
-        "ghcr.io/anthropics/devcontainer-features/claude-code:1"
-      ]
-    },
-    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:3.1.0": {
-      "version": "3.1.0",
-      "resolved": "ghcr.io/shira-code-cmd/devcontainer-features/my-setup@sha256:da04e5e380dbc1760c67a51d6114c0bceee6927ffac4f795b1afd483888163d9",
-      "integrity": "sha256:da04e5e380dbc1760c67a51d6114c0bceee6927ffac4f795b1afd483888163d9",
-      "dependsOn": [
-        "ghcr.io/devcontainers/features/github-cli:1"
-      ]
-    },
-    "ghcr.io/shira-code-cmd/devcontainer-features/opencode:1": {
-      "version": "1.0.0",
-      "resolved": "ghcr.io/shira-code-cmd/devcontainer-features/opencode@sha256:17495f923be8f2551c593084d11140b4882635ace65c20f7dd2a44eee33ce1b9",
-      "integrity": "sha256:17495f923be8f2551c593084d11140b4882635ace65c20f7dd2a44eee33ce1b9",
-      "dependsOn": [
+        "ghcr.io/devcontainers/features/github-cli:1",
         "ghcr.io/devcontainers/features/common-utils:2",
+        "ghcr.io/devcontainers/features/node:2.1.2",
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1",
         "ghcr.io/dirien/devcontainer-features/opencode:0"
       ]
     }
