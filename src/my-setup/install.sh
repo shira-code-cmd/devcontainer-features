@@ -182,5 +182,8 @@ link_dir() {
 # Named volume for zsh history (mounted at container start, root-owned at first).
 mkdir -p "${HISTORY_DIR}"
 chown -R "${USER_NAME}:${USER_GROUP}" "${HISTORY_DIR}"
+# updateRemoteUserUID may change the user's UID after build, which would leave the
+# volume root dir owned by a stale UID. Keep it writable regardless (sticky bit).
+chmod 1777 "${HISTORY_DIR}"
 
 link_dir "${USER_HOME}/.config/gh" /mnt/gh/config
