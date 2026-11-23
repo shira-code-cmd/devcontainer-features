@@ -34,5 +34,19 @@ check "gh config mount point exists" bash -c "[ -d /mnt/gh/config ]"
 check "github credential helper is configured" bash -c "git config --global --get-all credential.https://github.com.helper | grep -F '!gh auth git-credential'"
 check "gist credential helper is configured" bash -c "git config --global --get-all credential.https://gist.github.com.helper | grep -F '!gh auth git-credential'"
 
+# Claude Code
+check "claude is available" bash -c "command -v claude"
+check "CLAUDE_CONFIG_DIR is set" bash -c "[ \"\$CLAUDE_CONFIG_DIR\" = /mnt/claude/config ]"
+check "claude config mount point exists" bash -c "[ -d /mnt/claude/config ]"
+check "~/.claude is linked" bash -c "[ \"\$(readlink \"$HOME/.claude\")\" = /mnt/claude/config ]"
+check "claude config dir is writable" bash -c "touch /mnt/claude/config/.write-test && rm /mnt/claude/config/.write-test"
+
+# OpenCode
+check "opencode is available" bash -c "command -v opencode"
+check "opencode config is linked" bash -c "[ -L \"$HOME/.config/opencode\" ]"
+check "opencode data is linked" bash -c "[ -L \"$HOME/.local/share/opencode\" ]"
+check "opencode state is linked" bash -c "[ -L \"$HOME/.local/state/opencode\" ]"
+check "opencode mount points exist" bash -c "[ -d /mnt/opencode/config ] && [ -d /mnt/opencode/data ] && [ -d /mnt/opencode/state ]"
+
 # Report result
 reportResults

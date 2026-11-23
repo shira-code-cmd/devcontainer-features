@@ -6,9 +6,8 @@
 # from the value of 'python_project' in the test/_global/scenarios.json file.
 #
 # It verifies the combination used by a real Python project:
-#   - my-setup provides the common VS Code configuration, zsh (starship) and git/gh
-#   - python provides the Python VS Code configuration
-#   - the official node Feature installs Node.js
+#   - my-setup provides the common VS Code configuration (including Python),
+#     zsh (starship), git/gh, Node.js, Claude Code and OpenCode
 #
 # This test can be run with the following command (from the root of this repo)
 #    devcontainer features test --global-scenarios-only .
@@ -28,8 +27,10 @@ check "zshrc has the managed block" bash -c "grep -q '# >>> my-setup zsh >>>' \"
 # Python comes from the base image
 check "python is available" bash -c "command -v python"
 
-# Node.js is installed by the official 'node' Feature
+# Node.js, Claude Code and OpenCode are installed through my-setup's dependsOn
 check "node is available" bash -c "command -v node"
+check "claude is available" bash -c "command -v claude"
+check "opencode is available" bash -c "command -v opencode"
 
 # Report result
 # If any of the checks above exited with a non-zero exit code, the test will fail.

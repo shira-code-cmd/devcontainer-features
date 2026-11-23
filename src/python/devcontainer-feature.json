@@ -1,8 +1,8 @@
 {
   "name": "Python",
   "id": "python",
-  "version": "1.0.0",
-  "description": "Python向けのVS Code拡張と設定",
+  "version": "1.0.1",
+  "description": "[非推奨: my-setup に統合] Python向けのVS Code拡張と設定",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -17,5 +17,6 @@
         }
       }
     }
-  }
+  },
+  "deprecated": true
 }
