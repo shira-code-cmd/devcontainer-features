@@ -20,11 +20,7 @@
           }
         ]
       },
-      "extensions": [
-        "mads-hartmann.bash-ide-vscode",
-        "esbenp.prettier-vscode",
-        "mhutchie.git-graph"
-      ]
+      "extensions": ["mads-hartmann.bash-ide-vscode"]
     }
   }
 }
