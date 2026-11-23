@@ -1,17 +1,25 @@
 
 # My Setup (my-setup)
 
-自分の共通開発環境（VS Code拡張・設定・zsh）
+自分の共通開発環境（VS Code拡張・設定・zsh・git/gh連携）
 
 ## Example Usage
 
 ```json
 "features": {
-    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:2": {}
+    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:3": {}
 }
 ```
 
+## Options
 
+| Options Id | Description | Type | Default Value |
+|-----|-----|-----|-----|
+| gitUserName | git config --global user.name に設定する値（空の場合は設定しない） | string | - |
+| gitUserEmail | git config --global user.email に設定する値（空の場合は設定しない） | string | - |
+| starship | starship プロンプトをインストールして ~/.zshrc で初期化する | boolean | true |
+| autosuggestions | zsh-autosuggestions をインストールして ~/.zshrc で読み込む | boolean | true |
+| syntaxHighlighting | zsh-syntax-highlighting をインストールして ~/.zshrc で読み込む | boolean | true |
 
 ## Customizations
 
