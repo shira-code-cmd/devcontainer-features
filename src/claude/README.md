@@ -1,9 +1,9 @@
-> **非推奨**: この Feature は `my-setup` に統合されました。
-
+### **IMPORTANT NOTE**
+- **This Feature is deprecated, and will no longer receive any further updates/support.**
 
 # Claude Code (claude)
 
-Claude Code と設定・認証情報の永続化
+[非推奨: my-setup に統合] Claude Code と設定・認証情報の永続化
 
 ## Example Usage
 

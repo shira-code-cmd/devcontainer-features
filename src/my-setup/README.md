@@ -22,15 +22,6 @@
 | persistHistory | zsh のコマンド履歴を volume に保存し、コンテナを作り直しても引き継ぐ | boolean | true |
 | syntaxHighlighting | zsh-syntax-highlighting をインストールして ~/.zshrc で読み込む | boolean | true |
 
-## 含まれるもの
-
-- Node.js、Claude Code、OpenCode（`dependsOn` で導入。オプションでは無効化できません）
-- ホストの `~/.claude`、`~/.config/opencode`、`~/.local/share/opencode`、`~/.local/state/opencode`、`~/.config/gh` の bind mount（ホスト側に事前に作成が必要）
-
-```json
-"initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh ${localEnv:HOME}/.claude ${localEnv:HOME}/.config/opencode ${localEnv:HOME}/.local/share/opencode ${localEnv:HOME}/.local/state/opencode"
-```
-
 ## Customizations
 
 ### VS Code Extensions
