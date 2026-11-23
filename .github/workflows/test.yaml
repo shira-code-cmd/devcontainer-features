@@ -51,6 +51,8 @@ jobs:
           mkdir -p "$HOME/.local/state/opencode"
           mkdir -p "$HOME/.config/gh"
           mkdir -p "$HOME/.claude"
+          # コンテナ内のユーザー(vscode など)がランナーと別 UID でも書き込めるようにする
+          chmod -R a+rwX "$HOME/.config/opencode" "$HOME/.local/share/opencode" "$HOME/.local/state/opencode" "$HOME/.config/gh" "$HOME/.claude"
 
       - name: "Install latest devcontainer CLI"
         run: npm install -g @devcontainers/cli
@@ -77,6 +79,8 @@ jobs:
           mkdir -p "$HOME/.local/state/opencode"
           mkdir -p "$HOME/.config/gh"
           mkdir -p "$HOME/.claude"
+          # コンテナ内のユーザー(vscode など)がランナーと別 UID でも書き込めるようにする
+          chmod -R a+rwX "$HOME/.config/opencode" "$HOME/.local/share/opencode" "$HOME/.local/state/opencode" "$HOME/.config/gh" "$HOME/.claude"
 
       - name: "Install latest devcontainer CLI"
         run: npm install -g @devcontainers/cli
@@ -89,10 +93,17 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # my-setup Feature は ${localEnv:HOME}/.config/gh を bind mount するため、
+      # my-setup Feature は ${localEnv:HOME}/... を bind mount するため、
       # マウント元ディレクトリを CI ランナーにも用意する
       - name: "Create host directories for mount tests"
-        run: mkdir -p "$HOME/.config/gh"
+        run: |
+          mkdir -p "$HOME/.config/opencode"
+          mkdir -p "$HOME/.local/share/opencode"
+          mkdir -p "$HOME/.local/state/opencode"
+          mkdir -p "$HOME/.config/gh"
+          mkdir -p "$HOME/.claude"
+          # コンテナ内のユーザー(vscode など)がランナーと別 UID でも書き込めるようにする
+          chmod -R a+rwX "$HOME/.config/opencode" "$HOME/.local/share/opencode" "$HOME/.local/state/opencode" "$HOME/.config/gh" "$HOME/.claude"
 
       - name: "Install latest devcontainer CLI"
         run: npm install -g @devcontainers/cli
