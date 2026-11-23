@@ -1,7 +1,7 @@
 {
   "name": "My Setup",
   "id": "my-setup",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "自分の共通開発環境（VS Code拡張・設定・zsh・git/gh連携・Claude Code・OpenCode・Python）",
   "options": {
     "gitUserName": {
@@ -27,7 +27,7 @@
     "persistHistory": {
       "type": "boolean",
       "default": true,
-      "description": "zsh のコマンド履歴を volume に保存し、コンテナを作り直しても引き継ぐ"
+      "description": "zsh のコマンド履歴をホストの bind mount に保存し、コンテナを作り直しても引き継ぐ"
     },
     "syntaxHighlighting": {
       "type": "boolean",
@@ -45,32 +45,32 @@
   "mounts": [
     {
       "type": "bind",
-      "source": "${localEnv:HOME}/.config/gh",
+      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/gh",
       "target": "/mnt/gh/config"
     },
     {
-      "type": "volume",
-      "source": "my-setup-zsh-history",
+      "type": "bind",
+      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/zsh-history",
       "target": "/mnt/zsh-history"
     },
     {
       "type": "bind",
-      "source": "${localEnv:HOME}/.claude",
+      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/claude",
       "target": "/mnt/claude/config"
     },
     {
       "type": "bind",
-      "source": "${localEnv:HOME}/.config/opencode",
+      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/opencode/config",
       "target": "/mnt/opencode/config"
     },
     {
-      "type": "volume",
-      "source": "my-setup-opencode-data",
+      "type": "bind",
+      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/opencode/data",
       "target": "/mnt/opencode/data"
     },
     {
       "type": "bind",
-      "source": "${localEnv:HOME}/.local/state/opencode",
+      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/opencode/state",
       "target": "/mnt/opencode/state"
     }
   ],

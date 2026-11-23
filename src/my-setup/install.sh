@@ -179,7 +179,7 @@ link_dir() {
     chown -h "${USER_NAME}:${USER_GROUP}" "$link"
 }
 
-# Named volume for zsh history (mounted at container start, root-owned at first).
+# Bind mount for zsh history (mounted at container start; ownership follows the host dir).
 mkdir -p "${HISTORY_DIR}"
 chown -R "${USER_NAME}:${USER_GROUP}" "${HISTORY_DIR}"
 # updateRemoteUserUID may change the user's UID after build, which would leave the
@@ -202,7 +202,7 @@ link_dir "${USER_HOME}/.claude" /mnt/claude/config
 
 mkdir -p /mnt/opencode/config /mnt/opencode/data /mnt/opencode/state
 chown -R "${USER_NAME}:${USER_GROUP}" /mnt/opencode
-# /mnt/opencode/data is a named volume (root-owned at first, and the owner UID may
+# /mnt/opencode/data is a bind mount (the owner UID may differ from the host dir, and may
 # change via updateRemoteUserUID). Keep it writable regardless, like the zsh history.
 chmod 1777 /mnt/opencode/data
 
