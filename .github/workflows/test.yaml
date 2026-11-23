@@ -89,6 +89,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      # my-setup Feature は ${localEnv:HOME}/.config/gh を bind mount するため、
+      # マウント元ディレクトリを CI ランナーにも用意する
+      - name: "Create host directories for mount tests"
+        run: mkdir -p "$HOME/.config/gh"
+
       - name: "Install latest devcontainer CLI"
         run: npm install -g @devcontainers/cli
 
