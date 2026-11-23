@@ -1,13 +1,13 @@
 
 # My Setup (my-setup)
 
-自分の共通開発環境（VS Code拡張・設定・zsh・git/gh連携）
+自分の共通開発環境（VS Code拡張・設定・zsh・git/gh連携・Claude Code・OpenCode・Python）
 
 ## Example Usage
 
 ```json
 "features": {
-    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:3": {}
+    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:4": {}
 }
 ```
 
@@ -22,6 +22,15 @@
 | persistHistory | zsh のコマンド履歴を volume に保存し、コンテナを作り直しても引き継ぐ | boolean | true |
 | syntaxHighlighting | zsh-syntax-highlighting をインストールして ~/.zshrc で読み込む | boolean | true |
 
+## 含まれるもの
+
+- Node.js、Claude Code、OpenCode（`dependsOn` で導入。オプションでは無効化できません）
+- ホストの `~/.claude`、`~/.config/opencode`、`~/.local/share/opencode`、`~/.local/state/opencode`、`~/.config/gh` の bind mount（ホスト側に事前に作成が必要）
+
+```json
+"initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh ${localEnv:HOME}/.claude ${localEnv:HOME}/.config/opencode ${localEnv:HOME}/.local/share/opencode ${localEnv:HOME}/.local/state/opencode"
+```
+
 ## Customizations
 
 ### VS Code Extensions
@@ -31,6 +40,8 @@
 - `mhutchie.git-graph`
 - `donjayamanne.githistory`
 - `eamodio.gitlens`
+- `ms-python.python`
+- `charliermarsh.ruff`
 
 
 

@@ -1,3 +1,5 @@
+> **非推奨**: この Feature は `my-setup` に統合されました。
+
 
 # Claude Code (claude)
 

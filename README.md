@@ -7,12 +7,18 @@
 
 | Feature | 内容 |
 | --- | --- |
-| [`my-setup`](src/my-setup) | 共通の VS Code 拡張・設定、zsh 環境（starship など）、Git のユーザー設定と GitHub CLI 連携 |
-| [`python`](src/python) | Python 向けの VS Code 拡張・設定（Python、Ruff） |
-| [`opencode`](src/opencode) | OpenCode 本体と、設定・データの永続化マウント |
-| [`claude`](src/claude) | Claude Code 本体と、設定・認証情報の永続化マウント |
+| [`my-setup`](src/my-setup) | 共通の VS Code 拡張・設定（Python / Ruff 含む）、zsh 環境（starship など）、Git のユーザー設定と GitHub CLI 連携、Node.js、Claude Code、OpenCode と、それぞれの設定・認証情報の永続化マウント |
+| [`python`](src/python) | **非推奨**: `my-setup` に統合されました |
+| [`opencode`](src/opencode) | **非推奨**: `my-setup` に統合されました |
+| [`claude`](src/claude) | **非推奨**: `my-setup` に統合されました |
 
-`python` Feature は VS Code の設定だけを提供します。Python 本体や pip パッケージはベースイメージ／プロジェクト側で用意してください。
+`my-setup` は VS Code の Python 設定だけを提供します。Python 本体や pip パッケージはベースイメージ／プロジェクト側で用意してください。
+
+`my-setup` の依存 Feature（Node.js・Claude Code・OpenCode）や拡張・マウントは静的に宣言されるため、オプションでは無効化できません。常にすべて入ります。
+
+### 3.x からの移行
+
+`python` / `opencode` / `claude` の各 Feature を `features` から外し、`my-setup` を `:4` にしてください。`initializeCommand` にホスト側ディレクトリの作成が必要です（bind mount 元が無いとコンテナ起動に失敗します）。
 
 ## 使い方
 
@@ -20,16 +26,12 @@
 {
   "image": "mcr.microsoft.com/devcontainers/python:3.14-trixie",
   "features": {
-    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:3": {
+    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:4": {
       "gitUserName": "your-name",
       "gitUserEmail": "you@example.com"
-    },
-    "ghcr.io/shira-code-cmd/devcontainer-features/python:1": {},
-    "ghcr.io/shira-code-cmd/devcontainer-features/opencode:1": {},
-    "ghcr.io/shira-code-cmd/devcontainer-features/claude:2": {},
-    "ghcr.io/devcontainers/features/node:2.1.2": {}
+    }
   },
-  "initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh ${localEnv:HOME}/.claude",
+  "initializeCommand": "mkdir -p ${localEnv:HOME}/.config/gh ${localEnv:HOME}/.claude ${localEnv:HOME}/.config/opencode ${localEnv:HOME}/.local/share/opencode ${localEnv:HOME}/.local/state/opencode",
   "postCreateCommand": "pip install -r requirements.txt"
 }
 ```

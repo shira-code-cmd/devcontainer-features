@@ -187,3 +187,27 @@ chown -R "${USER_NAME}:${USER_GROUP}" "${HISTORY_DIR}"
 chmod 1777 "${HISTORY_DIR}"
 
 link_dir "${USER_HOME}/.config/gh" /mnt/gh/config
+
+# ---- Claude Code ----
+
+# The host's ~/.claude is bind-mounted at /mnt/claude/config when the container
+# starts. CLAUDE_CONFIG_DIR points here, so ~/.claude.json is stored inside it.
+mkdir -p /mnt/claude/config
+chown -R "${USER_NAME}:${USER_GROUP}" /mnt/claude
+
+# Keep ~/.claude usable for paths that do not honor CLAUDE_CONFIG_DIR.
+link_dir "${USER_HOME}/.claude" /mnt/claude/config
+
+# ---- OpenCode ----
+
+mkdir -p /mnt/opencode/config /mnt/opencode/data /mnt/opencode/state
+chown -R "${USER_NAME}:${USER_GROUP}" /mnt/opencode
+
+link_dir "${USER_HOME}/.config/opencode" /mnt/opencode/config
+link_dir "${USER_HOME}/.local/share/opencode" /mnt/opencode/data
+link_dir "${USER_HOME}/.local/state/opencode" /mnt/opencode/state
+
+# Make opencode available regardless of the shell's login configuration.
+if [ -x "${USER_HOME}/.opencode/bin/opencode" ]; then
+    ln -sf "${USER_HOME}/.opencode/bin/opencode" /usr/local/bin/opencode
+fi

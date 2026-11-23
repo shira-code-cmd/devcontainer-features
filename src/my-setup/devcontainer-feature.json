@@ -1,8 +1,8 @@
 {
   "name": "My Setup",
   "id": "my-setup",
-  "version": "3.1.1",
-  "description": "自分の共通開発環境（VS Code拡張・設定・zsh・git/gh連携）",
+  "version": "4.0.0",
+  "description": "自分の共通開発環境（VS Code拡張・設定・zsh・git/gh連携・Claude Code・OpenCode・Python）",
   "options": {
     "gitUserName": {
       "type": "string",
@@ -36,7 +36,11 @@
     }
   },
   "dependsOn": {
-    "ghcr.io/devcontainers/features/github-cli:1": {}
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/node:2.1.2": {},
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
+    "ghcr.io/dirien/devcontainer-features/opencode:0": {}
   },
   "mounts": [
     {
@@ -48,6 +52,26 @@
       "type": "volume",
       "source": "my-setup-zsh-history",
       "target": "/mnt/zsh-history"
+    },
+    {
+      "type": "bind",
+      "source": "${localEnv:HOME}/.claude",
+      "target": "/mnt/claude/config"
+    },
+    {
+      "type": "bind",
+      "source": "${localEnv:HOME}/.config/opencode",
+      "target": "/mnt/opencode/config"
+    },
+    {
+      "type": "bind",
+      "source": "${localEnv:HOME}/.local/share/opencode",
+      "target": "/mnt/opencode/data"
+    },
+    {
+      "type": "bind",
+      "source": "${localEnv:HOME}/.local/state/opencode",
+      "target": "/mnt/opencode/state"
     }
   ],
   "customizations": {
@@ -57,13 +81,24 @@
         "esbenp.prettier-vscode",
         "mhutchie.git-graph",
         "donjayamanne.githistory",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "ms-python.python",
+        "charliermarsh.ruff"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
         "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "python-envs.defaultEnvManager": "ms-python.python:system",
+        "python.analysis.typeCheckingMode": "standard",
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff"
+        }
       }
     }
-  }
+  },
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/mnt/claude/config"
+  },
+  "postCreateCommand": "opencode upgrade 2.3.2 --major"
 }

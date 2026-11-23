@@ -1,8 +1,8 @@
 {
   "name": "OpenCode",
   "id": "opencode",
-  "version": "1.0.0",
-  "description": "OpenCode と設定・データの永続化",
+  "version": "1.0.1",
+  "description": "[非推奨: my-setup に統合] OpenCode と設定・データの永続化",
   "documentationURL": "https://opencode.ai",
   "dependsOn": {
     "ghcr.io/devcontainers/features/common-utils:2": {},
@@ -25,5 +25,6 @@
       "target": "/mnt/opencode/state"
     }
   ],
-  "postCreateCommand": "opencode upgrade 2.3.2 --major"
+  "postCreateCommand": "opencode upgrade 2.3.2 --major",
+  "deprecated": true
 }
