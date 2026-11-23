@@ -39,10 +39,10 @@
         "ghcr.io/anthropics/devcontainer-features/claude-code:1"
       ]
     },
-    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:3": {
-      "version": "3.0.0",
-      "resolved": "ghcr.io/shira-code-cmd/devcontainer-features/my-setup@sha256:b23aac18a91d18e71a562fb24c63baaacffc5afaadd84bda813e96da68d9bc1b",
-      "integrity": "sha256:b23aac18a91d18e71a562fb24c63baaacffc5afaadd84bda813e96da68d9bc1b",
+    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:3.1.0": {
+      "version": "3.1.0",
+      "resolved": "ghcr.io/shira-code-cmd/devcontainer-features/my-setup@sha256:da04e5e380dbc1760c67a51d6114c0bceee6927ffac4f795b1afd483888163d9",
+      "integrity": "sha256:da04e5e380dbc1760c67a51d6114c0bceee6927ffac4f795b1afd483888163d9",
       "dependsOn": [
         "ghcr.io/devcontainers/features/github-cli:1"
       ]
