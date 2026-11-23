@@ -5,7 +5,8 @@
       "gitUserName": "shira-code-cmd",
       "gitUserEmail": "marty.go.go.pooh@gmail.com"
     },
-    "ghcr.io/devcontainers/features/docker-in-docker:4.1.3": {},
+    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:2": {},
+    "ghcr.io/shira-code-cmd/devcontainer-features/zsh:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/opencode:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/claude:2": {}
   },
