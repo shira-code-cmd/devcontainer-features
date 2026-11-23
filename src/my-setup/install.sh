@@ -13,6 +13,9 @@ GIT_USER_EMAIL="${GITUSEREMAIL:-}"
 STARSHIP="${STARSHIP:-true}"
 AUTOSUGGESTIONS="${AUTOSUGGESTIONS:-true}"
 SYNTAX_HIGHLIGHTING="${SYNTAXHIGHLIGHTING:-true}"
+PERSIST_HISTORY="${PERSISTHISTORY:-true}"
+
+HISTORY_DIR="/mnt/zsh-history"
 
 AUTOSUGGESTIONS_FILE="/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 SYNTAX_HIGHLIGHTING_FILE="/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
@@ -79,6 +82,15 @@ fi
 
 {
     echo '# >>> my-setup zsh >>>'
+    if [ "${PERSIST_HISTORY}" = "true" ]; then
+        echo "HISTFILE=${HISTORY_DIR}/.zsh_history"
+        echo 'HISTSIZE=10000'
+        echo 'SAVEHIST=10000'
+        echo 'setopt SHARE_HISTORY'
+        echo 'setopt HIST_IGNORE_ALL_DUPS'
+        echo 'setopt HIST_IGNORE_SPACE'
+        echo 'setopt HIST_REDUCE_BLANKS'
+    fi
     echo 'autoload -Uz compinit && compinit'
     if [ "${AUTOSUGGESTIONS}" = "true" ]; then
         printf '[ -f %s ] && source %s\n' "${AUTOSUGGESTIONS_FILE}" "${AUTOSUGGESTIONS_FILE}"
@@ -166,5 +178,9 @@ link_dir() {
     ln -s "$target" "$link"
     chown -h "${USER_NAME}:${USER_GROUP}" "$link"
 }
+
+# Named volume for zsh history (mounted at container start, root-owned at first).
+mkdir -p "${HISTORY_DIR}"
+chown -R "${USER_NAME}:${USER_GROUP}" "${HISTORY_DIR}"
 
 link_dir "${USER_HOME}/.config/gh" /mnt/gh/config

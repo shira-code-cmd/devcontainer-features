@@ -1,7 +1,7 @@
 {
   "name": "My Setup",
   "id": "my-setup",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "自分の共通開発環境（VS Code拡張・設定・zsh・git/gh連携）",
   "options": {
     "gitUserName": {
@@ -24,6 +24,11 @@
       "default": true,
       "description": "zsh-autosuggestions をインストールして ~/.zshrc で読み込む"
     },
+    "persistHistory": {
+      "type": "boolean",
+      "default": true,
+      "description": "zsh のコマンド履歴を volume に保存し、コンテナを作り直しても引き継ぐ"
+    },
     "syntaxHighlighting": {
       "type": "boolean",
       "default": true,
@@ -38,6 +43,11 @@
       "type": "bind",
       "source": "${localEnv:HOME}/.config/gh",
       "target": "/mnt/gh/config"
+    },
+    {
+      "type": "volume",
+      "source": "my-setup-zsh-history",
+      "target": "/mnt/zsh-history"
     }
   ],
   "customizations": {

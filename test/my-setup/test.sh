@@ -20,6 +20,10 @@ check "managed block appears once" bash -c "[ \"\$(grep -c '# >>> my-setup zsh >
 check "autosuggestions is loaded" bash -c "grep -q 'zsh-autosuggestions.zsh' \"$HOME/.zshrc\""
 check "starship is initialized" bash -c "grep -q 'starship init zsh' \"$HOME/.zshrc\""
 check "syntax highlighting is loaded" bash -c "grep -q 'zsh-syntax-highlighting.zsh' \"$HOME/.zshrc\""
+check "history file points to the volume" bash -c "grep -q 'HISTFILE=/mnt/zsh-history/.zsh_history' \"$HOME/.zshrc\""
+check "history share option is set" bash -c "grep -q 'setopt SHARE_HISTORY' \"$HOME/.zshrc\""
+check "history mount point exists" bash -c "[ -d /mnt/zsh-history ]"
+check "history dir is writable" bash -c "touch /mnt/zsh-history/.w && rm /mnt/zsh-history/.w"
 check "interactive zsh starts" bash -c "TERM=xterm-256color zsh -i -c 'exit 0'"
 
 # git / gh

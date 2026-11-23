@@ -19,6 +19,7 @@
 | gitUserEmail | git config --global user.email に設定する値（空の場合は設定しない） | string | - |
 | starship | starship プロンプトをインストールして ~/.zshrc で初期化する | boolean | true |
 | autosuggestions | zsh-autosuggestions をインストールして ~/.zshrc で読み込む | boolean | true |
+| persistHistory | zsh のコマンド履歴を volume に保存し、コンテナを作り直しても引き継ぐ | boolean | true |
 | syntaxHighlighting | zsh-syntax-highlighting をインストールして ~/.zshrc で読み込む | boolean | true |
 
 ## Customizations
