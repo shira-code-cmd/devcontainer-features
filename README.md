@@ -7,9 +7,7 @@
 
 | Feature | 内容 |
 | --- | --- |
-| [`git-config`](src/git-config) | Git のユーザー設定と GitHub CLI の認証連携 |
-| [`my-setup`](src/my-setup) | 共通の VS Code 拡張・設定（Prettier、Git 系、Container Tools）と zsh |
-| [`zsh`](src/zsh) | starship・自動提案・シンタックスハイライト付きの zsh 環境 |
+| [`my-setup`](src/my-setup) | 共通の VS Code 拡張・設定、zsh 環境（starship など）、Git のユーザー設定と GitHub CLI 連携 |
 | [`python`](src/python) | Python 向けの VS Code 拡張・設定（Python、Ruff） |
 | [`opencode`](src/opencode) | OpenCode 本体と、設定・データの永続化マウント |
 | [`claude`](src/claude) | Claude Code 本体と、設定・認証情報の永続化マウント |
@@ -22,12 +20,10 @@
 {
   "image": "mcr.microsoft.com/devcontainers/python:3.14-trixie",
   "features": {
-    "ghcr.io/shira-code-cmd/devcontainer-features/git-config:1": {
+    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:3": {
       "gitUserName": "your-name",
       "gitUserEmail": "you@example.com"
     },
-    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:2": {},
-    "ghcr.io/shira-code-cmd/devcontainer-features/zsh:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/python:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/opencode:1": {},
     "ghcr.io/shira-code-cmd/devcontainer-features/claude:2": {},
@@ -40,7 +36,7 @@
 
 ### このリポジトリ自身での利用
 
-このリポジトリの [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json) も、公開済みの Feature（`git-config` と `claude`）を `ghcr.io` から参照して使っています。
+このリポジトリの [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json) も、公開済みの Featureを `ghcr.io` から参照して使っています。
 
 - `src/` を変更しても、公開（リリース）されるまでこのリポジトリの開発環境には反映されません
 - 開発中の Feature を手元で試したいときは、`features` に `./features/<name>` を指定し、`initializeCommand` で `src/<name>` を `.devcontainer/features/<name>` にコピーしてください（ローカル Feature は `.devcontainer/` 配下にしか置けないため）
@@ -52,19 +48,9 @@
 
 - `.devcontainer/features/` を使う場合は `.gitignore` に追加してください
 
-### `git-config`
-
-- `gitUserName` / `gitUserEmail` を指定すると、`git config --global` に名前とメールを設定します（空の場合は設定しません）
-- ホストの `~/.config/gh` を `/mnt/gh/config` に bind mount し、コンテナ内の `~/.config/gh` から symlink します
-- `gh` は `ghcr.io/devcontainers/features/github-cli` を依存としてインストールします
-- `github.com` / `gist.github.com` の credential helper に `!gh auth git-credential` を設定します（`gh auth setup-git` 相当）
-- ホスト側で `gh auth login` 済みである必要があります。`~/.config/gh` がない場合は未認証のまま起動します
-- `initializeCommand` で `~/.config/gh` を作成しておくと、Docker が root 所有の空ディレクトリを作るのを防げます
-- ホストの `gh` がトークンを OS のキーチェーン（macOS の Keychain など）に保存している場合、共有される `hosts.yml` にはユーザー名しか書かれず、コンテナ内の `gh` は「token invalid」になります。リビルドしても直りません
-  - コンテナ内で `gh auth login` を一度実行してください。キーチェーンがないためトークンは `hosts.yml` に平文で保存され、ホストと共有されるのでリビルド後も残ります
-  - `git push` だけは、VS Code がホストの認証情報を転送するため `gh` の状態に関係なく動きます
-
 ### `my-setup`
+
+共通の開発環境を 1 つにまとめた Feature です。
 
 - VS Code 拡張
   - `ms-azuretools.vscode-containers`
@@ -76,10 +62,8 @@
   - デフォルトフォーマッター: Prettier
   - 保存時フォーマット: 有効
   - Linux のデフォルトターミナル: zsh
-- zsh がなければ apt でインストールします（Debian / Ubuntu 系イメージが対象）
-- シェルの設定（starship・プラグインなど）は [`zsh`](#zsh) Feature を使います
 
-### `zsh`
+#### zsh
 
 - zsh がなければ apt でインストールします（Debian / Ubuntu 系イメージが対象）
 - 有効なオプションに応じて以下を導入します
@@ -87,8 +71,23 @@
   - `zsh-autosuggestions`
   - `zsh-syntax-highlighting`
 - リモートユーザーの `~/.zshrc` に管理ブロックを追記します（既存の設定は保持し、再実行時はブロックだけ置き換えます）
-- VS Code の Linux デフォルトターミナルを zsh に設定します
-- オプション `starship` / `autosuggestions` / `syntaxHighlighting` で個別に無効化できます
+- オプション `starship` / `autosuggestions` / `syntaxHighlighting`（既定 `true`）で個別に無効化できます
+
+#### git / GitHub CLI
+
+- `gitUserName` / `gitUserEmail` を指定すると、`git config --global` に名前とメールを設定します（空の場合は設定しません）
+- ホストの `~/.config/gh` を `/mnt/gh/config` に bind mount し、コンテナ内の `~/.config/gh` から symlink します
+- `gh` は `ghcr.io/devcontainers/features/github-cli` を依存としてインストールします
+- `github.com` / `gist.github.com` の credential helper に `!gh auth git-credential` を設定します（`gh auth setup-git` 相当）
+- ホスト側で `gh auth login` 済みである必要があります。`~/.config/gh` がない場合は未認証のまま起動します
+- bind mount は常に有効です。ホストに `~/.config/gh` がないと起動に失敗することがあるため、`initializeCommand` で作成しておいてください（Docker が root 所有の空ディレクトリを作るのも防げます）
+- ホストの `gh` がトークンを OS のキーチェーン（macOS の Keychain など）に保存している場合、共有される `hosts.yml` にはユーザー名しか書かれず、コンテナ内の `gh` は「token invalid」になります。リビルドしても直りません
+  - コンテナ内で `gh auth login` を一度実行してください。キーチェーンがないためトークンは `hosts.yml` に平文で保存され、ホストと共有されるのでリビルド後も残ります
+  - `git push` だけは、VS Code がホストの認証情報を転送するため `gh` の状態に関係なく動きます
+
+#### 移行（`my-setup:2` + `zsh` + `git-config` から）
+
+`git-config` と `zsh` Feature は廃止しました（公開済みの旧バージョンは ghcr に残ります）。`my-setup:3` に置き換え、`git-config` のオプションをそのまま `my-setup` に渡してください。
 
 ### `python`
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This test file is executed against a running container built from the
-# 'zsh' Feature on an image that already ships a ~/.zshrc
+# 'my-setup' Feature on an image that already ships a ~/.zshrc
 # (mcr.microsoft.com/devcontainers/base:ubuntu).
 
 set -e
@@ -12,11 +12,11 @@ source dev-container-features-test-lib
 # The existing oh-my-zsh configuration must not be removed
 check "existing zshrc content is preserved" bash -c "grep -q 'oh-my-zsh' \"$HOME/.zshrc\""
 
-check "zshrc has the managed block" bash -c "grep -q '# >>> zsh feature >>>' \"$HOME/.zshrc\""
-check "managed block appears once" bash -c "[ \"\$(grep -c '# >>> zsh feature >>>' \"$HOME/.zshrc\")\" -eq 1 ]"
+check "zshrc has the managed block" bash -c "grep -q '# >>> my-setup zsh >>>' \"$HOME/.zshrc\""
+check "managed block appears once" bash -c "[ \"\$(grep -c '# >>> my-setup zsh >>>' \"$HOME/.zshrc\")\" -eq 1 ]"
 
 # syntax-highlighting must be sourced after the existing configuration
-check "managed block is appended at the end" bash -c "[ \"\$(tail -n 1 \"$HOME/.zshrc\")\" = '# <<< zsh feature <<<' ]"
+check "managed block is appended at the end" bash -c "[ \"\$(tail -n 1 \"$HOME/.zshrc\")\" = '# <<< my-setup zsh <<<' ]"
 
 check "interactive zsh starts" bash -c "TERM=xterm-256color zsh -i -c 'exit 0'"
 

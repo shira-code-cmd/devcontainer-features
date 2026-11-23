@@ -1,8 +1,8 @@
 {
-    "disabled": {
+    "zsh_disabled": {
         "image": "debian:latest",
         "features": {
-            "zsh": {
+            "my-setup": {
                 "starship": false,
                 "autosuggestions": false,
                 "syntaxHighlighting": false
@@ -12,7 +12,16 @@
     "existing_zshrc": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
-            "zsh": {}
+            "my-setup": {}
+        }
+    },
+    "git_configured": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "my-setup": {
+                "gitUserName": "Test User",
+                "gitUserEmail": "test@example.com"
+            }
         }
     }
 }
