@@ -30,10 +30,10 @@
       "resolved": "ghcr.io/dirien/devcontainer-features/opencode@sha256:5508ee25a18cdf13daf5b5849513305558b3b8ba41f6977ea68cd2ad2268ba2b",
       "integrity": "sha256:5508ee25a18cdf13daf5b5849513305558b3b8ba41f6977ea68cd2ad2268ba2b"
     },
-    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:4.1.0": {
-      "version": "4.1.0",
-      "resolved": "ghcr.io/shira-code-cmd/devcontainer-features/my-setup@sha256:954b60749e342e6daf99b96c1bfd5ea85dbb0788a5c806316c1093739290ac57",
-      "integrity": "sha256:954b60749e342e6daf99b96c1bfd5ea85dbb0788a5c806316c1093739290ac57",
+    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:5.0.0": {
+      "version": "5.0.0",
+      "resolved": "ghcr.io/shira-code-cmd/devcontainer-features/my-setup@sha256:7e6571670a55dbdf6eb6e5dd400a6a494d9177abfc828a62c36e89188f80be51",
+      "integrity": "sha256:7e6571670a55dbdf6eb6e5dd400a6a494d9177abfc828a62c36e89188f80be51",
       "dependsOn": [
         "ghcr.io/devcontainers/features/github-cli:1",
         "ghcr.io/devcontainers/features/common-utils:2",
