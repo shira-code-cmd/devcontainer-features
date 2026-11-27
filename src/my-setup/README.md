@@ -7,7 +7,7 @@
 
 ```json
 "features": {
-    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:5": {}
+    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:6": {}
 }
 ```
 
@@ -19,7 +19,7 @@
 | gitUserEmail | git config --global user.email に設定する値（空の場合は設定しない） | string | - |
 | starship | starship プロンプトをインストールして ~/.zshrc で初期化する | boolean | true |
 | autosuggestions | zsh-autosuggestions をインストールして ~/.zshrc で読み込む | boolean | true |
-| persistHistory | zsh のコマンド履歴をホストの bind mount に保存し、コンテナを作り直しても引き継ぐ | boolean | true |
+| persistHistory | zsh のコマンド履歴をワークスペース内（.devcontainer/.persist）に保存し、コンテナを作り直しても引き継ぐ | boolean | true |
 | syntaxHighlighting | zsh-syntax-highlighting をインストールして ~/.zshrc で読み込む | boolean | true |
 
 ## Customizations
@@ -37,15 +37,17 @@
 ## 含まれるもの
 
 - Node.js、Claude Code、OpenCode（`dependsOn` で導入。オプションでは無効化できません）
-- ホストの環境変数 `MY_DEVCONTAINER_DATA_DIR` 配下のディレクトリ（`gh`、`zsh-history`、`claude`、`opencode/{config,data,state}`）の bind mount（**必須**。ホスト側に事前に作成が必要）。名前付きボリュームは使いません
+- gh・zsh 履歴・Claude Code・OpenCode の設定と認証情報を、ワークスペース内の `.devcontainer/.persist/` に永続化する仕組み。ホストからの mount は使わず、ホスト側の準備も不要です
+  - ディレクトリは自身の `.gitignore`（`*`）で git の管理対象から外れます
+  - データはプロジェクトごとに独立します。プロジェクトごとに一度 `gh auth login` と Claude の `/login` が必要です
 
-```bash
-mkdir -p "$MY_DEVCONTAINER_DATA_DIR"/{gh,zsh-history,claude,opencode/{config,data,state}}
-```
+## 5.x からの移行
+
+6.0.0 でホストからの bind mount（`MY_DEVCONTAINER_DATA_DIR`）を廃止しました。5.x のデータを引き継ぐ場合は、6.0.0 でコンテナを作り直したあと、ホストで `cp -a "$MY_DEVCONTAINER_DATA_DIR"/. <ワークスペース>/.devcontainer/.persist/` を実行してください。
 
 ## 旧 Feature からの移行
 
-`python` / `opencode` / `claude` は `my-setup` に統合され、非推奨になりました。`features` から外し、`my-setup` を `:5` 以降にしてください。5.0.0 以降はホスト側の環境変数 `MY_DEVCONTAINER_DATA_DIR` が必要です。
+`python` / `opencode` / `claude` は `my-setup` に統合され、非推奨になりました。`features` から外し、`my-setup` を `:6` にしてください。
 
 
 ---
