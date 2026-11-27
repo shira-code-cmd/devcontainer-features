@@ -19,20 +19,20 @@
 
 ### 5.x からの移行
 
-6.0.0 でホストからの bind mount を廃止しました。ホスト側の環境変数 `MY_DEVCONTAINER_DATA_DIR` は不要です。データは各ワークスペースの `.devcontainer/.my-setup/` に保存されます（[データの保存先](#データの保存先)を参照）。
+6.0.0 でホストからの bind mount を廃止しました。ホスト側の環境変数 `MY_DEVCONTAINER_DATA_DIR` は不要です。データは各ワークスペースの `.devcontainer/.persist/` に保存されます（[データの保存先](#データの保存先)を参照）。
 
 5.x のデータを引き継ぐ場合は、6.0.0 でコンテナを作り直したあと、ホストで次のようにコピーしてください。引き継がない場合は、プロジェクトごとに `gh auth login` と Claude の `/login` をやり直してください。
 
 ```bash
-cp -a "$MY_DEVCONTAINER_DATA_DIR"/. <ワークスペース>/.devcontainer/.my-setup/
+cp -a "$MY_DEVCONTAINER_DATA_DIR"/. <ワークスペース>/.devcontainer/.persist/
 ```
 
 ## データの保存先
 
-`my-setup` は、認証情報・設定・履歴をワークスペース内の `.devcontainer/.my-setup/` に保存します。ホストからの mount も名前付きボリュームも使わないので、ホスト側での準備は要りません。ワークスペースは devcontainer が元々コンテナに見せているフォルダなので、rebuild してもデータは残ります。
+`my-setup` は、認証情報・設定・履歴をワークスペース内の `.devcontainer/.persist/` に保存します。ホストからの mount も名前付きボリュームも使わないので、ホスト側での準備は要りません。ワークスペースは devcontainer が元々コンテナに見せているフォルダなので、rebuild してもデータは残ります。
 
 ```
-<ワークスペース>/.devcontainer/.my-setup/
+<ワークスペース>/.devcontainer/.persist/
 ├── .gitignore        # 中身は「*」。このディレクトリごと git の管理対象から外れる
 ├── gh/               # ~/.config/gh
 ├── zsh-history/      # zsh の HISTFILE
@@ -46,7 +46,7 @@ cp -a "$MY_DEVCONTAINER_DATA_DIR"/. <ワークスペース>/.devcontainer/.my-se
 - ビルド時のコンテナには、ワークスペースの場所がまだ分かりません。そのため、上記の各パスはまず固定のアンカー `/mnt/my-setup/data` 経由の symlink にしておきます。コンテナ作成時に `onCreateCommand` の `/usr/local/share/my-setup/init-data.sh` がディレクトリを作り、アンカーをワークスペースへ向けます
 - ディレクトリは自身の `.gitignore` で ignore されるため、各リポジトリの `.gitignore` に追記する必要はありません
 - データはプロジェクトごとに独立します。プロジェクトごとに一度 `gh auth login` と Claude の `/login` が必要です
-- トークンは平文で保存されます。git には入りませんが、`docker build .` のビルドコンテキストや zip にしたフォルダには含まれます。必要なら `.dockerignore` に `.devcontainer/.my-setup` を追加してください
+- トークンは平文で保存されます。git には入りませんが、`docker build .` のビルドコンテキストや zip にしたフォルダには含まれます。必要なら `.dockerignore` に `.devcontainer/.persist` を追加してください
 
 ## 使い方
 
@@ -105,7 +105,7 @@ cp -a "$MY_DEVCONTAINER_DATA_DIR"/. <ワークスペース>/.devcontainer/.my-se
 #### git / GitHub CLI
 
 - `gitUserName` / `gitUserEmail` を指定すると、`git config --global` に名前とメールを設定します（空の場合は設定しません）
-- `~/.config/gh` は `.devcontainer/.my-setup/gh` を指します（[データの保存先](#データの保存先)）
+- `~/.config/gh` は `.devcontainer/.persist/gh` を指します（[データの保存先](#データの保存先)）
 - `gh` は `ghcr.io/devcontainers/features/github-cli` を依存としてインストールします
 - `github.com` / `gist.github.com` の credential helper に `!gh auth git-credential` を設定します（`gh auth setup-git` 相当）
 - ホストの `~/.config/gh` とは共有されないため、プロジェクトごとにコンテナ内で一度 `gh auth login` を実行してください。コンテナにはキーチェーンがないため、トークンは `hosts.yml` に平文で保存され、rebuild 後も残ります
@@ -118,11 +118,11 @@ cp -a "$MY_DEVCONTAINER_DATA_DIR"/. <ワークスペース>/.devcontainer/.my-se
 #### Claude Code / OpenCode
 
 - 本体は `dependsOn` で導入されます（`anthropics/devcontainer-features/claude-code`、`dirien/devcontainer-features/opencode`）。Node.js も自動で入ります
-- `CLAUDE_CONFIG_DIR=/mnt/my-setup/data/claude`（実体は `.devcontainer/.my-setup/claude`）を設定します（コンテナ内の `~/.claude` は symlink）
+- `CLAUDE_CONFIG_DIR=/mnt/my-setup/data/claude`（実体は `.devcontainer/.persist/claude`）を設定します（コンテナ内の `~/.claude` は symlink）
   - 状態ファイル `.claude.json` もこのディレクトリに保存されるため、ホストの `~/.claude.json` とは共有されません。初回起動時にオンボーディングが表示されることがあります
   - macOS ホストでは認証情報が Keychain に保存されるため、プロジェクトごとにコンテナ内で一度 `/login` してください（`.credentials.json` に保存され、rebuild 後も維持されます）
-- OpenCode の設定・履歴 DB・状態は `.devcontainer/.my-setup/opencode/{config,data,state}` に保存されます。コンテナ作成時に `opencode upgrade 2.3.2 --major` を実行します
-- 既存の `~/.claude` を引き継ぐ場合は、Claude を終了してから `cp -a ~/.claude/. <ワークスペース>/.devcontainer/.my-setup/claude/` でコピーしてください
+- OpenCode の設定・履歴 DB・状態は `.devcontainer/.persist/opencode/{config,data,state}` に保存されます。コンテナ作成時に `opencode upgrade 2.3.2 --major` を実行します
+- 既存の `~/.claude` を引き継ぐ場合は、Claude を終了してから `cp -a ~/.claude/. <ワークスペース>/.devcontainer/.persist/claude/` でコピーしてください
 
 ## 開発
 

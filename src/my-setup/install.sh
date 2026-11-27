@@ -15,7 +15,7 @@ AUTOSUGGESTIONS="${AUTOSUGGESTIONS:-true}"
 SYNTAX_HIGHLIGHTING="${SYNTAXHIGHLIGHTING:-true}"
 PERSIST_HISTORY="${PERSISTHISTORY:-true}"
 
-# Persistent data lives in <workspace>/.devcontainer/.my-setup. The workspace
+# Persistent data lives in <workspace>/.devcontainer/.persist. The workspace
 # is unknown at build time, so everything points at this anchor, which
 # init-data.sh (onCreateCommand) links to the workspace directory.
 DATA_ROOT="/mnt/my-setup"
@@ -167,12 +167,12 @@ chmod 1777 "${DATA_ROOT}"
 mkdir -p /usr/local/share/my-setup
 cat > /usr/local/share/my-setup/init-data.sh <<EOF
 #!/bin/bash
-# Create <workspace>/.devcontainer/.my-setup and link ${DATA_DIR} to it.
+# Create <workspace>/.devcontainer/.persist and link ${DATA_DIR} to it.
 # Lifecycle commands run in the workspace folder; an argument overrides it.
 set -e
 
 workspace="\${1:-\$PWD}"
-data="\${workspace}/.devcontainer/.my-setup"
+data="\${workspace}/.devcontainer/.persist"
 
 mkdir -p "\${data}"/gh "\${data}"/zsh-history "\${data}"/claude \\
     "\${data}"/opencode/config "\${data}"/opencode/data "\${data}"/opencode/state

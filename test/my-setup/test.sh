@@ -15,7 +15,7 @@ source dev-container-features-test-lib
 WS="$(mktemp -d)"
 git -C "$WS" init -q 2>/dev/null || true
 /usr/local/share/my-setup/init-data.sh "$WS"
-DATA="$WS/.devcontainer/.my-setup"
+DATA="$WS/.devcontainer/.persist"
 export WS DATA
 
 check "init script is installed" bash -c "[ -x /usr/local/share/my-setup/init-data.sh ]"

@@ -27,7 +27,7 @@
     "persistHistory": {
       "type": "boolean",
       "default": true,
-      "description": "zsh のコマンド履歴をワークスペース内（.devcontainer/.my-setup）に保存し、コンテナを作り直しても引き継ぐ"
+      "description": "zsh のコマンド履歴をワークスペース内（.devcontainer/.persist）に保存し、コンテナを作り直しても引き継ぐ"
     },
     "syntaxHighlighting": {
       "type": "boolean",
