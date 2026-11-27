@@ -15,7 +15,12 @@ AUTOSUGGESTIONS="${AUTOSUGGESTIONS:-true}"
 SYNTAX_HIGHLIGHTING="${SYNTAXHIGHLIGHTING:-true}"
 PERSIST_HISTORY="${PERSISTHISTORY:-true}"
 
-HISTORY_DIR="/mnt/zsh-history"
+# Persistent data lives in <workspace>/.devcontainer/.my-setup. The workspace
+# is unknown at build time, so everything points at this anchor, which
+# init-data.sh (onCreateCommand) links to the workspace directory.
+DATA_ROOT="/mnt/my-setup"
+DATA_DIR="${DATA_ROOT}/data"
+HISTORY_DIR="${DATA_DIR}/zsh-history"
 
 AUTOSUGGESTIONS_FILE="/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 SYNTAX_HIGHLIGHTING_FILE="/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
@@ -152,10 +157,34 @@ if [ -f "${USER_HOME}/.gitconfig" ]; then
     chown "${USER_NAME}:${USER_GROUP}" "${USER_HOME}/.gitconfig"
 fi
 
-# The host's gh configuration is bind-mounted at /mnt/gh/config when the
-# container starts. Link it into the remote user's home directory.
-mkdir -p /mnt/gh/config
-chown -R "${USER_NAME}:${USER_GROUP}" /mnt/gh
+# ---- persistent data (workspace) ----
+
+# The anchor directory must be writable by the remote user at runtime.
+# updateRemoteUserUID may change the UID after build, so use the sticky bit.
+mkdir -p "${DATA_ROOT}"
+chmod 1777 "${DATA_ROOT}"
+
+mkdir -p /usr/local/share/my-setup
+cat > /usr/local/share/my-setup/init-data.sh <<EOF
+#!/bin/bash
+# Create <workspace>/.devcontainer/.my-setup and link ${DATA_DIR} to it.
+# Lifecycle commands run in the workspace folder; an argument overrides it.
+set -e
+
+workspace="\${1:-\$PWD}"
+data="\${workspace}/.devcontainer/.my-setup"
+
+mkdir -p "\${data}"/gh "\${data}"/zsh-history "\${data}"/claude \\
+    "\${data}"/opencode/config "\${data}"/opencode/data "\${data}"/opencode/state
+chmod 700 "\${data}"
+# The directory ignores itself, so tokens and history are never committed.
+if [ ! -f "\${data}/.gitignore" ]; then
+    printf '*\\n' > "\${data}/.gitignore"
+fi
+
+ln -sfn "\${data}" "${DATA_DIR}"
+EOF
+chmod 755 /usr/local/share/my-setup/init-data.sh
 
 link_dir() {
     local link="$1"
@@ -169,7 +198,7 @@ link_dir() {
             rm -rf "$link"
         else
             echo "ERROR: ${link} already exists and is not empty." >&2
-            echo "Remove it and rebuild so the persistent mount can be used." >&2
+            echo "Remove it and rebuild so the persistent data directory can be used." >&2
             exit 1
         fi
     fi
@@ -179,36 +208,19 @@ link_dir() {
     chown -h "${USER_NAME}:${USER_GROUP}" "$link"
 }
 
-# Bind mount for zsh history (mounted at container start; ownership follows the host dir).
-mkdir -p "${HISTORY_DIR}"
-chown -R "${USER_NAME}:${USER_GROUP}" "${HISTORY_DIR}"
-# updateRemoteUserUID may change the user's UID after build, which would leave the
-# volume root dir owned by a stale UID. Keep it writable regardless (sticky bit).
-chmod 1777 "${HISTORY_DIR}"
-
-link_dir "${USER_HOME}/.config/gh" /mnt/gh/config
+link_dir "${USER_HOME}/.config/gh" "${DATA_DIR}/gh"
 
 # ---- Claude Code ----
 
-# The host's ~/.claude is bind-mounted at /mnt/claude/config when the container
-# starts. CLAUDE_CONFIG_DIR points here, so ~/.claude.json is stored inside it.
-mkdir -p /mnt/claude/config
-chown -R "${USER_NAME}:${USER_GROUP}" /mnt/claude
-
-# Keep ~/.claude usable for paths that do not honor CLAUDE_CONFIG_DIR.
-link_dir "${USER_HOME}/.claude" /mnt/claude/config
+# CLAUDE_CONFIG_DIR points at ${DATA_DIR}/claude, so ~/.claude.json is stored
+# inside it. Keep ~/.claude usable for paths that do not honor CLAUDE_CONFIG_DIR.
+link_dir "${USER_HOME}/.claude" "${DATA_DIR}/claude"
 
 # ---- OpenCode ----
 
-mkdir -p /mnt/opencode/config /mnt/opencode/data /mnt/opencode/state
-chown -R "${USER_NAME}:${USER_GROUP}" /mnt/opencode
-# /mnt/opencode/data is a bind mount (the owner UID may differ from the host dir, and may
-# change via updateRemoteUserUID). Keep it writable regardless, like the zsh history.
-chmod 1777 /mnt/opencode/data
-
-link_dir "${USER_HOME}/.config/opencode" /mnt/opencode/config
-link_dir "${USER_HOME}/.local/share/opencode" /mnt/opencode/data
-link_dir "${USER_HOME}/.local/state/opencode" /mnt/opencode/state
+link_dir "${USER_HOME}/.config/opencode" "${DATA_DIR}/opencode/config"
+link_dir "${USER_HOME}/.local/share/opencode" "${DATA_DIR}/opencode/data"
+link_dir "${USER_HOME}/.local/state/opencode" "${DATA_DIR}/opencode/state"
 
 # Make opencode available regardless of the shell's login configuration.
 if [ -x "${USER_HOME}/.opencode/bin/opencode" ]; then
