@@ -1,6 +1,6 @@
 {
     "zsh_disabled": {
-        "image": "debian:latest",
+        "image": "mcr.microsoft.com/devcontainers/base:debian",
         "features": {
             "my-setup": {
                 "starship": false,
@@ -10,13 +10,13 @@
         }
     },
     "existing_zshrc": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "image": "mcr.microsoft.com/devcontainers/base:debian",
         "features": {
             "my-setup": {}
         }
     },
     "git_configured": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "image": "mcr.microsoft.com/devcontainers/base:debian",
         "features": {
             "my-setup": {
                 "gitUserName": "Test User",

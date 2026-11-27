@@ -2,7 +2,7 @@
 
 # This test file is executed against a running container built from the
 # 'my-setup' Feature on an image that already ships a ~/.zshrc
-# (mcr.microsoft.com/devcontainers/base:ubuntu).
+# (mcr.microsoft.com/devcontainers/base:debian).
 
 set -e
 
