@@ -1,12 +1,13 @@
 {
   "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
   "features": {
-    "ghcr.io/shira-code-cmd/devcontainer-features/my-setup:5.0.0": {
+    "./features/my-setup": {
       "gitUserName": "shira-code-cmd",
       "gitUserEmail": "marty.go.go.pooh@gmail.com"
     },
     "ghcr.io/devcontainers/features/docker-in-docker:4.1.3": {}
   },
+  "initializeCommand": "rm -rf .devcontainer/features/my-setup && mkdir -p .devcontainer/features && cp -R src/my-setup .devcontainer/features/my-setup",
   "postCreateCommand": "npm install -g @devcontainers/cli",
   "customizations": {
     "vscode": {

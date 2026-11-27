@@ -1,7 +1,7 @@
 {
   "name": "My Setup",
   "id": "my-setup",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "自分の共通開発環境（VS Code拡張・設定・zsh・git/gh連携・Claude Code・OpenCode・Python）",
   "options": {
     "gitUserName": {
@@ -27,7 +27,7 @@
     "persistHistory": {
       "type": "boolean",
       "default": true,
-      "description": "zsh のコマンド履歴をホストの bind mount に保存し、コンテナを作り直しても引き継ぐ"
+      "description": "zsh のコマンド履歴をワークスペース内（.devcontainer/.persist）に保存し、コンテナを作り直しても引き継ぐ"
     },
     "syntaxHighlighting": {
       "type": "boolean",
@@ -42,38 +42,6 @@
     "ghcr.io/anthropics/devcontainer-features/claude-code:1": {},
     "ghcr.io/dirien/devcontainer-features/opencode:0": {}
   },
-  "mounts": [
-    {
-      "type": "bind",
-      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/gh",
-      "target": "/mnt/gh/config"
-    },
-    {
-      "type": "bind",
-      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/zsh-history",
-      "target": "/mnt/zsh-history"
-    },
-    {
-      "type": "bind",
-      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/claude",
-      "target": "/mnt/claude/config"
-    },
-    {
-      "type": "bind",
-      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/opencode/config",
-      "target": "/mnt/opencode/config"
-    },
-    {
-      "type": "bind",
-      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/opencode/data",
-      "target": "/mnt/opencode/data"
-    },
-    {
-      "type": "bind",
-      "source": "${localEnv:MY_DEVCONTAINER_DATA_DIR}/opencode/state",
-      "target": "/mnt/opencode/state"
-    }
-  ],
   "customizations": {
     "vscode": {
       "extensions": [
@@ -98,7 +66,8 @@
     }
   },
   "containerEnv": {
-    "CLAUDE_CONFIG_DIR": "/mnt/claude/config"
+    "CLAUDE_CONFIG_DIR": "/mnt/my-setup/data/claude"
   },
+  "onCreateCommand": "/usr/local/share/my-setup/init-data.sh",
   "postCreateCommand": "opencode upgrade 2.3.2 --major"
 }
