@@ -24,6 +24,9 @@ check "data is writable and not tracked by git" bash -c "touch ~/.config/gh/host
 # zsh
 check "zsh tools are installed" bash -c "command -v zsh && command -v starship && test -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh && test -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 check "managed block appears once" bash -c "[ \"\$(grep -c '# >>> my-setup zsh >>>' ~/.zshrc)\" -eq 1 ]"
+# base:debian ships an oh-my-zsh ~/.zshrc; it must be kept, and syntax-highlighting must load after it
+check "existing zshrc content is preserved" bash -c "grep -q 'oh-my-zsh' ~/.zshrc"
+check "managed block is appended at the end" bash -c "[ \"\$(tail -n 1 ~/.zshrc)\" = '# <<< my-setup zsh <<<' ]"
 check "history file points to the data dir" bash -c "grep -q 'HISTFILE=/mnt/my-setup/data/zsh-history/.zsh_history' ~/.zshrc"
 check "interactive zsh starts" bash -c "TERM=xterm-256color zsh -i -c 'exit 0'"
 

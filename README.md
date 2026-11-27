@@ -129,18 +129,13 @@ cp -a "$MY_DEVCONTAINER_DATA_DIR"/. <ワークスペース>/.devcontainer/.persi
 Feature の追加・変更後は、リポジトリの devcontainer 内でテストできます。
 
 ```bash
-# 単一 Feature の自動テスト
 devcontainer features test --skip-scenarios -f my-setup -i mcr.microsoft.com/devcontainers/base:debian .
-
-# グローバルシナリオ（複数 Feature の組み合わせ）
-devcontainer features test --global-scenarios-only .
 ```
 
 CI では以下を実行します。テストは Debian 系イメージの一般ユーザーでのみ行っており、root ユーザーや Ubuntu 系イメージでの動作は確認していません。
 
 - `devcontainer-feature.json` の検証
-- 各 Feature の自動テスト（`mcr.microsoft.com/devcontainers/base:debian`）
-- `test/_global` のシナリオテスト
+- 各 Feature の自動テスト（`mcr.microsoft.com/devcontainers/base:debian`、デフォルトオプションのみ）
 
 ## リリース
 
