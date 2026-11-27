@@ -6,8 +6,6 @@ on:
       - "src/**"
       - "test/**"
       - ".github/workflows/ci.yaml"
-  # release.yaml から公開前のゲートとして呼ばれる
-  workflow_call:
   workflow_dispatch:
 
 jobs:
